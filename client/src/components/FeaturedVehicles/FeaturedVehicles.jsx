@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchVehicles } from "../../api/vehicles.js";
+import { FALLBACK_VEHICLES } from "../../data/vehicles.js";
 import VehicleCard from "./VehicleCard.jsx";
 import useReveal from "../../hooks/useReveal.js";
 import "./FeaturedVehicles.css";
@@ -20,7 +21,10 @@ export default function FeaturedVehicles() {
       })
       .catch(() => {
         if (cancelled) return;
-        setStatus("error");
+        // Sin backend disponible (ej. deploy solo del front): mostramos
+        // la copia local en lugar de un estado de error.
+        setVehicles(FALLBACK_VEHICLES);
+        setStatus("success");
       });
 
     return () => {
@@ -39,11 +43,6 @@ export default function FeaturedVehicles() {
         </div>
 
         {status === "loading" && <p className="featured__state">Cargando vehículos...</p>}
-        {status === "error" && (
-          <p className="featured__state">
-            No pudimos cargar los vehículos. Verificá que el servidor esté corriendo.
-          </p>
-        )}
         {status === "success" && vehicles.length === 0 && (
           <p className="featured__state">Todavía no hay vehículos publicados.</p>
         )}
