@@ -2,52 +2,43 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 48px;
-  padding: 0 24px;
-  border-radius: var(--radius-sm);
+  gap: 9px;
   border: 1px solid transparent;
   font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   white-space: nowrap;
 }
 
-.btn:hover {
-  opacity: 0.88;
+.btn--copper {
+  background: var(--copper);
+  color: var(--ink);
+  border-color: var(--copper);
 }
 
-.btn:active {
-  transform: translateY(1px);
+.btn--copper:hover {
+  background: var(--copper-lit);
+  border-color: var(--copper-lit);
 }
 
-.btn--primary {
-  background: var(--color-primary);
-  color: var(--color-neutral);
-  border-color: var(--color-primary);
+.btn--bone {
+  background: var(--bone);
+  color: var(--ink);
+  border-color: var(--bone);
 }
 
-.btn--secondary {
-  background: var(--color-secondary);
-  color: var(--color-neutral);
-  border-color: var(--color-secondary);
+.btn--bone:hover {
+  background: var(--copper);
+  border-color: var(--copper);
 }
 
-.btn--inverted {
-  background: var(--color-neutral);
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.btn--outlined {
+.btn--outline {
   background: transparent;
-  color: var(--color-primary);
-  border-color: var(--color-secondary);
+  color: var(--bone);
+  border-color: var(--line-3);
 }
 
-.btn--outlined:hover {
-  background: rgba(255, 255, 255, 0.06);
-  opacity: 1;
+.btn--outline:hover {
+  background: rgba(242, 239, 233, 0.08);
+  border-color: rgba(242, 239, 233, 0.5);
 }

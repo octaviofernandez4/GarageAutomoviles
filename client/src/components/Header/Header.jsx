@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import Button from "../Button/Button.jsx";
+import useGoVisit from "../../hooks/useGoVisit.js";
 import "./Header.css";
 
 const NAV_LINKS = [
-  { label: "Stock", href: "#stock" },
-  { label: "Nosotros", href: "#why-us" },
-  { label: "Testimonios", href: "#testimonials" },
-  { label: "Contacto", href: "#contact" },
+  { label: "Inicio", to: "/", end: true },
+  { label: "Stock", to: "/stock" },
+  { label: "Tasá tu usado", to: "/tasar" },
 ];
+
+const WHATSAPP_URL = "https://wa.me/5493810000000";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const goVisit = useGoVisit();
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -18,47 +22,57 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="container header__inner">
-        <a href="#top" className="header__logo">     
-          <span className="header__wordmark">El Garage Automóviles</span>
-        </a>
+      <div className="header__checker header__checker--top" aria-hidden="true" />
 
-        <nav className={`header__nav ${open ? "header__nav--open" : ""}`}>
-          <ul>
+      <div className="header__bar">
+        <div className="container header__inner">
+          <Link to="/" className="header__logo">
+            <img src="/GarageAutomoviles.jpg" alt="El Garage Automóviles" />
+          </Link>
+
+          <nav className={`header__nav ${open ? "header__nav--open" : ""}`}>
             {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a href={link.href} onClick={() => setOpen(false)}>
-                  {link.label}
-                </a>
-              </li>
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.end}
+                className={({ isActive }) => `header__link ${isActive ? "header__link--active" : ""}`}
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </NavLink>
             ))}
-          </ul>
-          <Button
-            as="a"
-            href="#stock"
-            variant="primary"
-            className="header__cta header__cta--mobile"
-            onClick={() => setOpen(false)}
-          >
-            Ver Stock
+            <button
+              type="button"
+              className="header__link header__link--button"
+              onClick={() => {
+                setOpen(false);
+                goVisit();
+              }}
+            >
+              Visitanos
+            </button>
+          </nav>
+
+          <Button as="a" href={WHATSAPP_URL} target="_blank" rel="noreferrer" variant="bone" className="header__cta">
+            <span className="header__cta-dot" aria-hidden="true" />
+            WhatsApp
           </Button>
-        </nav>
 
-        <Button as="a" href="#stock" variant="primary" className="header__cta header__cta--desktop">
-          Ver Stock
-        </Button>
-
-        <button
-          className={`header__toggle ${open ? "header__toggle--open" : ""}`}
-          aria-label="Abrir menú"
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
+          <button
+            className={`header__toggle ${open ? "header__toggle--open" : ""}`}
+            aria-label="Abrir menú"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
       </div>
+
+      <div className="header__checker header__checker--bottom" aria-hidden="true" />
     </header>
   );
 }

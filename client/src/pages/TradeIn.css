@@ -1,0 +1,215 @@
+.trade-page {
+  padding: 64px 0 96px;
+}
+
+.trade-page__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: start;
+}
+
+.trade-page__title {
+  font-size: 56px;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  margin-top: 14px;
+}
+
+.trade-page__intro {
+  margin-top: 24px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-3);
+  max-width: 400px;
+}
+
+.trade-page__steps {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.trade-page__step {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 18px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+
+.trade-page__step-num {
+  font-size: 12.5px;
+  color: var(--copper);
+}
+
+.trade-page__step-title {
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.trade-page__step-desc {
+  font-size: 14.5px;
+  color: var(--text-4);
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.trade-page__panel {
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+  padding: 32px;
+}
+
+.trade-page__form-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.trade-page__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.trade-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.trade-page__field--busca {
+  margin-top: 22px;
+}
+
+.trade-page__field .mono {
+  font-size: 9.5px;
+  color: var(--text-4);
+}
+
+.trade-page__field input {
+  padding: 13px 14px;
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--bone);
+  font-size: 14.5px;
+}
+
+.trade-page__field input::placeholder {
+  color: var(--text-5);
+}
+
+.trade-page__estado {
+  margin-top: 22px;
+}
+
+.trade-page__estado > .mono {
+  font-size: 9.5px;
+  color: var(--text-4);
+}
+
+.trade-page__estado-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.trade-page__chip {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.trade-page__chip--active {
+  border-color: var(--copper);
+  background: rgba(224, 167, 94, 0.16);
+  color: var(--bone);
+}
+
+.trade-page__submit {
+  width: 100%;
+  margin-top: 26px;
+  padding: 16px;
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.trade-page__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.trade-page__error {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--rust);
+}
+
+.trade-page__legal {
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--text-5);
+  line-height: 1.5;
+}
+
+.trade-page__confirm {
+  padding: 24px 0;
+}
+
+.trade-page__check {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--green);
+  color: var(--green);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+.trade-page__confirm-title {
+  font-size: 26px;
+  letter-spacing: -0.035em;
+  margin-top: 22px;
+}
+
+.trade-page__confirm-line {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+
+.trade-page__confirm-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.trade-page__confirm-btn {
+  padding: 14px 22px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .trade-page__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .trade-page__title {
+    font-size: 40px;
+  }
+
+  .trade-page__fields {
+    grid-template-columns: 1fr;
+  }
+}

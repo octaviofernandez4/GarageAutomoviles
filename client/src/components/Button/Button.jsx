@@ -1,19 +1,29 @@
+import { Link } from "react-router-dom";
 import "./Button.css";
 
-const VARIANTS = ["primary", "secondary", "inverted", "outlined"];
+const VARIANTS = ["copper", "bone", "outline"];
 
 export default function Button({
   children,
-  variant = "primary",
+  variant = "copper",
   as = "button",
   href,
+  to,
   onClick,
   type = "button",
   className = "",
   ...rest
 }) {
-  const variantClass = VARIANTS.includes(variant) ? variant : "primary";
+  const variantClass = VARIANTS.includes(variant) ? variant : "copper";
   const classes = `btn btn--${variantClass} ${className}`.trim();
+
+  if (as === "link" || to) {
+    return (
+      <Link to={to} className={classes} onClick={onClick} {...rest}>
+        {children}
+      </Link>
+    );
+  }
 
   if (as === "a" || href) {
     return (

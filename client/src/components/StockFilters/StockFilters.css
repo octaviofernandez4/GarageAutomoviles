@@ -1,0 +1,145 @@
+.stock-filters {
+  position: sticky;
+  top: 96px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 24px;
+}
+
+.stock-filters__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.stock-filters__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+}
+
+.stock-filters__head-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stock-filters__clear {
+  background: none;
+  border: none;
+  color: var(--text-4);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.stock-filters__clear:hover {
+  color: var(--copper);
+}
+
+.stock-filters__close {
+  display: none;
+}
+
+.stock-filters__label {
+  font-size: 9.5px;
+  color: var(--text-4);
+  margin-bottom: 10px;
+}
+
+.stock-filters__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.stock-filters__chip {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.stock-filters__chip--active {
+  border-color: var(--copper);
+  background: rgba(224, 167, 94, 0.16);
+  color: var(--bone);
+}
+
+.stock-filters__price-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.stock-filters__price-head .mono {
+  font-size: 9.5px;
+  color: var(--text-4);
+}
+
+.stock-filters__price-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.stock-filters__range {
+  width: 100%;
+  accent-color: var(--copper);
+}
+
+.stock-filters__auto {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.stock-filters__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.stock-filters__checkbox input {
+  accent-color: var(--copper);
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 900px) {
+  .stock-filters {
+    position: fixed;
+    inset: 0;
+    top: auto;
+    z-index: 60;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+    padding: 24px 20px 32px;
+  }
+
+  .stock-filters--open {
+    transform: translateY(0);
+  }
+
+  .stock-filters__close {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--bone);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+}

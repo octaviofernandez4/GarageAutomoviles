@@ -1,45 +1,43 @@
 import Button from "../Button/Button.jsx";
-import useReveal from "../../hooks/useReveal.js";
 import "./VisitUs.css";
 
 const WHATSAPP_URL = "https://wa.me/5493810000000";
 const INSTAGRAM_URL = "https://instagram.com/elgarageautomoviles";
 const MAPS_EMBED_URL =
   "https://www.google.com/maps?q=Av.+Aconquija+1763,+Yerba+Buena,+Tucum%C3%A1n&output=embed";
-const MAPS_DIRECTIONS_URL =
-  "https://www.google.com/maps/search/?api=1&query=Av.+Aconquija+1763,+Yerba+Buena,+Tucum%C3%A1n";
+
+const HOURS = [
+  { label: "Lun a Vie", value: "09:00–13:00 · 16:30–20:30" },
+  { label: "Sábados", value: "09:00–13:00" },
+  { label: "Domingos", value: "Cerrado · atendemos por WhatsApp", muted: true },
+];
 
 export default function VisitUs() {
-  const { ref, className } = useReveal("left");
-
   return (
-    <section id="contact" className="section visit">
-      <div ref={ref} className={`container visit__grid ${className}`}>
-        <div className="visit__info">
-          <p className="eyebrow">Visitanos</p>
-          <p className="visit__intro">
-            Atención personalizada en nuestro showroom exclusivo.
-          </p>
+    <section id="visit" className="section visit">
+      <div className="container visit__grid">
+        <div>
+          <div className="overline">04 — Visitanos</div>
+          <h2 className="visit__title">
+            Av. Aconquija 1763
+            <br />
+            Yerba Buena
+          </h2>
 
-          <div className="visit__block">
-            <h3 className="visit__block-title">Dirección</h3>
-            <a href={MAPS_DIRECTIONS_URL} target="_blank" rel="noreferrer" className="visit__address">
-              <p>Av. Aconquija 1763</p>
-              <p>Yerba Buena, Tucumán</p>
-            </a>
-          </div>
-
-          <div className="visit__block">
-            <h3 className="visit__block-title">Horarios</h3>
-            <p>Lunes a Viernes 09:00 - 13:00 / 16:30 - 20:30</p>
-            <p>Sábados 09:00 - 13:00</p>
+          <div className="visit__hours">
+            {HOURS.map((row, index) => (
+              <div key={row.label} className={`visit__hours-row ${index === HOURS.length - 1 ? "visit__hours-row--last" : ""}`}>
+                <span className="mono">{row.label}</span>
+                <span className={row.muted ? "visit__hours-muted" : ""}>{row.value}</span>
+              </div>
+            ))}
           </div>
 
           <div className="visit__actions">
-            <Button as="a" href={WHATSAPP_URL} target="_blank" rel="noreferrer" variant="primary">
-              WhatsApp
+            <Button as="a" href={WHATSAPP_URL} target="_blank" rel="noreferrer" variant="copper" className="visit__btn">
+              Escribinos
             </Button>
-            <Button as="a" href={INSTAGRAM_URL} target="_blank" rel="noreferrer" variant="outlined">
+            <Button as="a" href={INSTAGRAM_URL} target="_blank" rel="noreferrer" variant="outline" className="visit__btn">
               Instagram
             </Button>
           </div>

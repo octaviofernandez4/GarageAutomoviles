@@ -1,0 +1,243 @@
+.detail-page__state {
+  padding: 64px 0;
+  font-size: 16px;
+  color: var(--text-4);
+}
+
+.detail-page__back-row {
+  padding: 24px 32px 0;
+}
+
+.detail-page__back {
+  color: var(--text-4);
+  font-size: 13.5px;
+  transition: color 0.15s ease;
+}
+
+.detail-page__back:hover {
+  color: var(--bone);
+}
+
+.detail-page__grid {
+  padding: 24px 32px 96px;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.detail-page__photo {
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+.detail-page__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-page__gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.detail-page__gallery-item {
+  aspect-ratio: 4 / 3;
+  background: repeating-linear-gradient(135deg, var(--card) 0 8px, var(--card-hover) 8px 16px);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+}
+
+.detail-page__gallery-item .mono {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-5);
+}
+
+.detail-page__section {
+  margin-top: 48px;
+}
+
+.detail-page__section-title {
+  font-size: 26px;
+  letter-spacing: -0.035em;
+}
+
+.detail-page__specs {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 40px;
+}
+
+.detail-page__spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.detail-page__spec-key {
+  font-size: 14px;
+  color: var(--text-4);
+}
+
+.detail-page__spec-value {
+  font-size: 14.5px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.detail-page__checks {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-page__check {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.detail-page__check-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-top: 7px;
+  flex: none;
+}
+
+.detail-page__check-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.detail-page__check-desc {
+  font-size: 14px;
+  color: var(--text-4);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.detail-page__aside {
+  position: sticky;
+  top: 96px;
+}
+
+.detail-page__panel {
+  border: 1px solid var(--line-3);
+  background: var(--panel);
+  padding: 28px;
+}
+
+.detail-page__badge {
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: var(--green);
+}
+
+.detail-page__name {
+  font-size: 34px;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  margin-top: 12px;
+}
+
+.detail-page__summary {
+  font-size: 14.5px;
+  color: var(--text-4);
+  margin-top: 8px;
+}
+
+.detail-page__price-block {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.detail-page__price {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.detail-page__price-note {
+  font-size: 13.5px;
+  color: var(--text-4);
+  margin-top: 6px;
+}
+
+.detail-page__finance {
+  margin-top: 22px;
+  padding: 16px 18px;
+  background: rgba(224, 167, 94, 0.1);
+  border: 1px solid rgba(224, 167, 94, 0.28);
+}
+
+.detail-page__finance-label {
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: var(--copper);
+}
+
+.detail-page__finance-line {
+  font-size: 15.5px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.detail-page__finance-note {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+
+.detail-page__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.detail-page__action {
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.detail-page__visit-note {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-5);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .detail-page__grid {
+    grid-template-columns: 1fr;
+    padding: 24px 20px 64px;
+  }
+
+  .detail-page__back-row {
+    padding: 20px 20px 0;
+  }
+
+  .detail-page__aside {
+    position: static;
+  }
+}

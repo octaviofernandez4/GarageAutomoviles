@@ -1,9 +1,5 @@
 .app {
   min-height: 100vh;
-}
-
-@media (max-width: 859px) {
-  .app main {
-    padding-bottom: 84px;
-  }
+  display: flex;
+  flex-direction: column;
 }

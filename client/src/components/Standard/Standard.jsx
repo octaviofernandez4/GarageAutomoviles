@@ -1,47 +1,56 @@
-import { ShieldCheckIcon, RefreshIcon, CashIcon, BoltIcon } from "./icons.jsx";
-import useReveal from "../../hooks/useReveal.js";
 import "./Standard.css";
 
-const FEATURES = [
+const STANDARDS = [
   {
-    icon: ShieldCheckIcon,
-    title: "Historial Verificado",
-    description: "Auditoría completa de VIN, patentes y documentación 100% al día para tu tranquilidad.",
+    num: "01",
+    title: "Historial verificado, no declarado",
+    desc: "Auditamos VIN, dominio, deuda de patentes e infracciones antes de publicar. El informe se te entrega impreso.",
   },
   {
-    icon: CashIcon,
-    title: "Financiación Propia",
-    description: "Planes a medida con tasas preferenciales, aprobación crediticia en el acto.",
+    num: "02",
+    title: "Precio publicado y final",
+    desc: "Lo que ves es lo que pagás: transferencia y verificación policial incluidas en el valor.",
   },
   {
-    icon: RefreshIcon,
-    title: "Recibimos tu Usado",
-    description: "Tasación transparente y al mejor valor de mercado como parte de pago.",
+    num: "03",
+    title: "Financiación propia y bancaria",
+    desc: "Armamos el plan con lo que puedas poner de anticipo. Aprobación crediticia en el día.",
   },
   {
-    icon: BoltIcon,
-    title: "Entrega Inmediata",
-    description: "Proceso de compra ágil. Liberá tu nuevo vehículo el mismo día.",
+    num: "04",
+    title: "Tomamos tu usado",
+    desc: "Tasación a valor real de mercado en Tucumán, sin descuentos sorpresa el día de la entrega.",
   },
 ];
 
 export default function Standard() {
-  const { ref, className } = useReveal("left");
-
   return (
-    <section id="why-us" className="section standard">
-      <div ref={ref} className={`container ${className}`}>
-        <h2 className="section-title standard__title">El Standard El Garage</h2>
+    <section className="standard">
+      <div className="container">
         <div className="standard__grid">
-          {FEATURES.map(({ icon: Icon, title, description }) => (
-            <div key={title} className="standard__item">
-              <div className="standard__icon">
-                <Icon />
+          <div>
+            <div className="overline standard__overline">02 — Cómo trabajamos</div>
+            <h2 className="standard__title">
+              El estándar
+              <br />
+              de la casa
+            </h2>
+            <p className="standard__intro">
+              Cuatro reglas que no negociamos, y que son la razón por la que la mayoría de nuestras
+              ventas vienen por recomendación.
+            </p>
+          </div>
+          <div>
+            {STANDARDS.map((item) => (
+              <div key={item.num} className="standard__row">
+                <span className="standard__num mono">{item.num}</span>
+                <div>
+                  <h3 className="standard__row-title">{item.title}</h3>
+                  <p className="standard__row-desc">{item.desc}</p>
+                </div>
               </div>
-              <h3 className="standard__item-title">{title}</h3>
-              <p className="standard__item-desc">{description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
