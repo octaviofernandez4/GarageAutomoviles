@@ -22,3 +22,19 @@ export async function fetchMe(token) {
   }
   return res.json();
 }
+
+export async function changePasswordRequest(token, currentPassword, newPassword) {
+  const res = await fetch(`${API_BASE}/api/auth/password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data.error || "No pudimos cambiar la contraseña.");
+  }
+  return data;
+}

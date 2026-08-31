@@ -25,6 +25,12 @@ export default function AdminLayout() {
           >
             Vehículos
           </NavLink>
+          <NavLink
+            to="/admin/cuenta"
+            className={({ isActive }) => (isActive ? "admin-layout__link--active" : "")}
+          >
+            Mi cuenta
+          </NavLink>
         </nav>
         <div className="admin-layout__user">
           <span className="mono">{admin?.name}</span>

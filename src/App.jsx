@@ -10,6 +10,7 @@ import AdminLogin from "./pages/admin/AdminLogin.jsx";
 import AdminLayout from "./pages/admin/AdminLayout.jsx";
 import AdminVehicles from "./pages/admin/AdminVehicles.jsx";
 import AdminVehicleForm from "./pages/admin/AdminVehicleForm.jsx";
+import AdminAccount from "./pages/admin/AdminAccount.jsx";
 import RequireAdmin from "./components/RequireAdmin/RequireAdmin.jsx";
 import { AdminAuthProvider } from "./context/AdminAuthContext.jsx";
 import "./App.css";
@@ -51,6 +52,7 @@ export default function App() {
             <Route index element={<AdminVehicles />} />
             <Route path="vehiculos/nuevo" element={<AdminVehicleForm mode="create" />} />
             <Route path="vehiculos/:id/editar" element={<AdminVehicleForm mode="edit" />} />
+            <Route path="cuenta" element={<AdminAccount />} />
           </Route>
         </Routes>
         {!isAdmin && <Footer />}
