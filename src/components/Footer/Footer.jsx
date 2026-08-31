@@ -57,6 +57,9 @@ export default function Footer() {
 
       <div className="container footer__bottom">
         <div className="footer__copy mono">© 2026 El Garage Automóviles</div>
+        <Link to="/admin" className="footer__admin mono">
+          Acceso interno
+        </Link>
       </div>
     </footer>
   );

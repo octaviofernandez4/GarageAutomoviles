@@ -63,15 +63,31 @@
 }
 
 .footer__bottom {
-  padding: 0 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 32px 40px;
+  border-top: 1px solid var(--line);
 }
 
 .footer__copy {
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
   font-size: 10.5px;
   letter-spacing: 0.12em;
   color: var(--text-5);
+}
+
+.footer__admin {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-5);
+  opacity: 0.6;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.footer__admin:hover {
+  opacity: 1;
+  color: var(--copper);
 }
 
 @media (max-width: 900px) {
