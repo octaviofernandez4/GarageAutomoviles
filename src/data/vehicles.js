@@ -1,5 +1,4 @@
-// Copia local de las 6 unidades, usada como respaldo cuando el front se
-// despliega sin el backend/base de datos conectados (ver useVehicles.js).
+
 export const FALLBACK_VEHICLES = [
   {
     id: "audi-q5",
