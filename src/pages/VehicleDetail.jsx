@@ -1,10 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button.jsx";
 import useVehicles from "../hooks/useVehicles.js";
 import { decorateVehicle, formatMoney } from "../utils/format.js";
 import "./VehicleDetail.css";
-
-const GALLERY = ["interior", "lateral", "detalle motor"];
 
 const CHECKS = [
   {
@@ -31,6 +30,11 @@ export default function VehicleDetail() {
   const { id } = useParams();
   const { vehicles, status } = useVehicles();
   const found = vehicles.find((v) => v.id === id);
+  const [activeImage, setActiveImage] = useState(0);
+
+  useEffect(() => {
+    setActiveImage(0);
+  }, [id]);
 
   if (status === "loading") {
     return (
@@ -84,16 +88,26 @@ export default function VehicleDetail() {
       <div className="container detail-page__grid">
         <div>
           <div className="detail-page__photo">
-            <img src={current.image} alt={current.name} />
+            <img src={current.images[activeImage] ?? current.image} alt={current.name} />
           </div>
 
-          <div className="detail-page__gallery">
-            {GALLERY.map((label) => (
-              <div key={label} className="detail-page__gallery-item">
-                <span className="mono">{label}</span>
-              </div>
-            ))}
-          </div>
+          {current.images.length > 1 && (
+            <div className="detail-page__gallery">
+              {current.images.map((src, i) => (
+                <button
+                  key={src + i}
+                  type="button"
+                  className={`detail-page__gallery-item ${
+                    i === activeImage ? "detail-page__gallery-item--active" : ""
+                  }`}
+                  onClick={() => setActiveImage(i)}
+                  aria-label={`Ver foto ${i + 1} de ${current.name}`}
+                >
+                  <img src={src} alt="" loading="lazy" />
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="detail-page__section">
             <h2 className="detail-page__section-title">Ficha técnica</h2>

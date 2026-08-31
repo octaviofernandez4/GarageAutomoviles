@@ -1,0 +1,157 @@
+.admin-vehicle-form__title {
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+
+.admin-vehicle-form__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-vehicle-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.admin-vehicle-form__field .mono {
+  font-size: 9.5px;
+  color: var(--text-4);
+}
+
+.admin-vehicle-form__field input {
+  padding: 12px 13px;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  color: var(--bone);
+  font-size: 14px;
+}
+
+.admin-vehicle-form__field input:disabled {
+  opacity: 0.6;
+}
+
+.admin-vehicle-form__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+.admin-vehicle-form__photos {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-vehicle-form__photos > .mono {
+  font-size: 9.5px;
+  color: var(--text-4);
+}
+
+.admin-vehicle-form__gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.admin-vehicle-form__photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  background: var(--card);
+}
+
+.admin-vehicle-form__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.admin-vehicle-form__cover {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(11, 11, 12, 0.75);
+  color: var(--copper-lit);
+  font-size: 9px;
+  padding: 3px 6px;
+}
+
+.admin-vehicle-form__photo-actions {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  background: rgba(11, 11, 12, 0.75);
+}
+
+.admin-vehicle-form__photo-actions button {
+  flex: 1;
+  padding: 6px 0;
+  background: transparent;
+  border: none;
+  color: var(--bone);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.admin-vehicle-form__photo-actions button:hover:not(:disabled) {
+  background: rgba(224, 167, 94, 0.2);
+}
+
+.admin-vehicle-form__photo-actions button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.admin-vehicle-form__upload {
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--line-3);
+  color: var(--text-4);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  padding: 8px;
+}
+
+.admin-vehicle-form__upload:hover {
+  border-color: var(--copper);
+  color: var(--bone);
+}
+
+.admin-vehicle-form__upload input {
+  display: none;
+}
+
+.admin-vehicle-form__error {
+  margin-top: 18px;
+  color: var(--rust);
+  font-size: 13.5px;
+}
+
+.admin-vehicle-form__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.admin-vehicle-form__actions button {
+  padding: 13px 24px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .admin-vehicle-form__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

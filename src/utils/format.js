@@ -19,8 +19,12 @@ export function formatNumber(value) {
 }
 
 export function decorateVehicle(vehicle) {
+  const images = vehicle.images?.length ? vehicle.images : [vehicle.image].filter(Boolean);
+
   return {
     ...vehicle,
+    images,
+    image: images[0],
     priceFmt: formatMoney(vehicle.price),
     kmFmt: formatKm(vehicle.km),
     summary: `${vehicle.year} · ${formatKm(vehicle.km)} · ${vehicle.engine} · ${vehicle.gearbox}`,

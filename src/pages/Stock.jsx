@@ -4,29 +4,30 @@ import StockFilters from "../components/StockFilters/StockFilters.jsx";
 import StockCard from "../components/StockCard/StockCard.jsx";
 import Button from "../components/Button/Button.jsx";
 import useVehicles from "../hooks/useVehicles.js";
+import useVehicleMeta from "../hooks/useVehicleMeta.js";
 import { decorateVehicle } from "../utils/format.js";
 import "./Stock.css";
 
-const DEFAULT_FILTERS = { brand: null, body: null, priceMax: 60000, onlyAuto: false };
-
-function readInitialFilters(searchParams) {
+function readInitialFilters(searchParams, meta) {
+  const brand = searchParams.get("brand");
   const body = searchParams.get("body");
   const priceMax = searchParams.get("priceMax");
   const onlyAuto = searchParams.get("onlyAuto");
 
   return {
-    ...DEFAULT_FILTERS,
+    brand: brand || null,
     body: body || null,
-    priceMax: priceMax ? Number(priceMax) : DEFAULT_FILTERS.priceMax,
+    priceMax: priceMax ? Number(priceMax) : meta.priceMax,
     onlyAuto: onlyAuto === "1",
   };
 }
 
 export default function Stock() {
   const { vehicles } = useVehicles();
+  const meta = useVehicleMeta();
   const [searchParams] = useSearchParams();
 
-  const [filters, setFilters] = useState(() => readInitialFilters(searchParams));
+  const [filters, setFilters] = useState(() => readInitialFilters(searchParams, meta));
   const [order, setOrder] = useState(() => searchParams.get("order") || "recent");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -47,7 +48,8 @@ export default function Stock() {
   }, [vehicles, filters, order]);
 
   const handleFilterChange = (patch) => setFilters((prev) => ({ ...prev, ...patch }));
-  const handleClear = () => setFilters(DEFAULT_FILTERS);
+  const handleClear = () =>
+    setFilters({ brand: null, body: null, priceMax: meta.priceMax, onlyAuto: false });
 
   return (
     <main className="stock-page">
@@ -79,6 +81,10 @@ export default function Stock() {
             onClear={handleClear}
             open={drawerOpen}
             onCloseDrawer={() => setDrawerOpen(false)}
+            brands={meta.brands}
+            bodies={meta.bodies}
+            priceMin={meta.priceMin}
+            priceMax={meta.priceMax}
           />
 
           <div>

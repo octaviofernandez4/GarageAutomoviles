@@ -6,6 +6,12 @@ import Home from "./pages/Home.jsx";
 import Stock from "./pages/Stock.jsx";
 import VehicleDetail from "./pages/VehicleDetail.jsx";
 import TradeIn from "./pages/TradeIn.jsx";
+import AdminLogin from "./pages/admin/AdminLogin.jsx";
+import AdminLayout from "./pages/admin/AdminLayout.jsx";
+import AdminVehicles from "./pages/admin/AdminVehicles.jsx";
+import AdminVehicleForm from "./pages/admin/AdminVehicleForm.jsx";
+import RequireAdmin from "./components/RequireAdmin/RequireAdmin.jsx";
+import { AdminAuthProvider } from "./context/AdminAuthContext.jsx";
 import "./App.css";
 
 function ScrollToTop() {
@@ -19,17 +25,36 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
   return (
-    <div className="app">
-      <ScrollToTop />
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/stock" element={<Stock />} />
-        <Route path="/stock/:id" element={<VehicleDetail />} />
-        <Route path="/tasar" element={<TradeIn />} />
-      </Routes>
-      <Footer />
-    </div>
+    <AdminAuthProvider>
+      <div className="app">
+        <ScrollToTop />
+        {!isAdmin && <Header />}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/stock" element={<Stock />} />
+          <Route path="/stock/:id" element={<VehicleDetail />} />
+          <Route path="/tasar" element={<TradeIn />} />
+
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <RequireAdmin>
+                <AdminLayout />
+              </RequireAdmin>
+            }
+          >
+            <Route index element={<AdminVehicles />} />
+            <Route path="vehiculos/nuevo" element={<AdminVehicleForm mode="create" />} />
+            <Route path="vehiculos/:id/editar" element={<AdminVehicleForm mode="edit" />} />
+          </Route>
+        </Routes>
+        {!isAdmin && <Footer />}
+      </div>
+    </AdminAuthProvider>
   );
 }

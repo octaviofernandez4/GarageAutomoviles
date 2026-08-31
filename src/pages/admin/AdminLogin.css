@@ -1,0 +1,55 @@
+.admin-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--ink);
+}
+
+.admin-login__card {
+  width: 100%;
+  max-width: 380px;
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+  padding: 32px;
+}
+
+.admin-login__title {
+  font-size: 28px;
+  letter-spacing: -0.035em;
+  margin-top: 10px;
+}
+
+.admin-login__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 20px;
+}
+
+.admin-login__field .mono {
+  font-size: 9.5px;
+  color: var(--text-4);
+}
+
+.admin-login__field input {
+  padding: 13px 14px;
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--bone);
+  font-size: 14.5px;
+}
+
+.admin-login__error {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--rust);
+}
+
+.admin-login__submit {
+  width: 100%;
+  margin-top: 24px;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 600;
+}

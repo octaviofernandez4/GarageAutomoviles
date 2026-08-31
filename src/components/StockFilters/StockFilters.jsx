@@ -1,10 +1,17 @@
 import { formatMoney } from "../../utils/format.js";
 import "./StockFilters.css";
 
-const BRANDS = ["Audi", "BMW", "Ford", "Toyota", "Volkswagen"];
-const BODIES = ["SUV", "Pick-up", "Hatchback"];
-
-export default function StockFilters({ filters, onChange, onClear, open, onCloseDrawer }) {
+export default function StockFilters({
+  filters,
+  onChange,
+  onClear,
+  open,
+  onCloseDrawer,
+  brands,
+  bodies,
+  priceMin,
+  priceMax: priceCeiling,
+}) {
   const { brand, body, priceMax, onlyAuto } = filters;
 
   return (
@@ -28,7 +35,7 @@ export default function StockFilters({ filters, onChange, onClear, open, onClose
 
       <div className="stock-filters__label mono">Marca</div>
       <div className="stock-filters__chips">
-        {BRANDS.map((b) => (
+        {brands.map((b) => (
           <button
             key={b}
             type="button"
@@ -42,7 +49,7 @@ export default function StockFilters({ filters, onChange, onClear, open, onClose
 
       <div className="stock-filters__label mono">Carrocería</div>
       <div className="stock-filters__chips">
-        {BODIES.map((b) => (
+        {bodies.map((b) => (
           <button
             key={b}
             type="button"
@@ -60,8 +67,8 @@ export default function StockFilters({ filters, onChange, onClear, open, onClose
       </div>
       <input
         type="range"
-        min={14000}
-        max={60000}
+        min={priceMin}
+        max={priceCeiling}
         step={500}
         value={priceMax}
         onChange={(e) => onChange({ priceMax: Number(e.target.value) })}

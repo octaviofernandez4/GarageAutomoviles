@@ -15,7 +15,7 @@ export const FALLBACK_VEHICLES = [
     traction: "Quattro",
     owners: 1,
     badge: "Recién ingresado",
-    image: "/vehicles/audi-q5.png",
+    images: ["/vehicles/audi-q5.png"],
   },
   {
     id: "raptor",
@@ -32,7 +32,7 @@ export const FALLBACK_VEHICLES = [
     traction: "4x4",
     owners: 1,
     badge: "Historial verificado",
-    image: "/vehicles/ranger-raptor.png",
+    images: ["/vehicles/ranger-raptor.png"],
   },
   {
     id: "territory",
@@ -49,7 +49,7 @@ export const FALLBACK_VEHICLES = [
     traction: "4x2",
     owners: 1,
     badge: "Service al día",
-    image: "/vehicles/territory.png",
+    images: ["/vehicles/territory.png"],
   },
   {
     id: "bmw-x1",
@@ -66,7 +66,7 @@ export const FALLBACK_VEHICLES = [
     traction: "4x2",
     owners: 2,
     badge: "Historial verificado",
-    image: "/vehicles/bmw-x1.png",
+    images: ["/vehicles/bmw-x1.png"],
   },
   {
     id: "yaris",
@@ -83,7 +83,7 @@ export const FALLBACK_VEHICLES = [
     traction: "4x2",
     owners: 1,
     badge: "Tomado en parte de pago",
-    image: "/vehicles/yaris.png",
+    images: ["/vehicles/yaris.png"],
   },
   {
     id: "polo",
@@ -100,6 +100,6 @@ export const FALLBACK_VEHICLES = [
     traction: "4x2",
     owners: 1,
     badge: "Service al día",
-    image: "/vehicles/polo.png",
+    images: ["/vehicles/polo.png"],
   },
 ];
