@@ -18,6 +18,25 @@ const STATUSES = [
   { key: "vendido", label: "Vendido", desc: "Marcado como vendido" },
 ];
 
+const DEFAULT_CHECKS = [
+  {
+    title: "VIN y dominio auditados",
+    description: "Verificación policial hecha, libre de deuda, prendas y multas al día de publicación.",
+  },
+  {
+    title: "Historial de service",
+    description: "Mantenimientos documentados en concesionario oficial hasta el último control.",
+  },
+  {
+    title: "Peritaje de chapa y pintura",
+    description: "Medición de espesor en los 12 paneles. Sin rastros de choque estructural.",
+  },
+  {
+    title: "Test drive sin cargo",
+    description: "Podés manejarla acompañada por un asesor antes de decidir.",
+  },
+];
+
 const EMPTY_FORM = {
   name: "",
   brand: "",
@@ -30,7 +49,6 @@ const EMPTY_FORM = {
   fuel: "",
   traction: "",
   owners: "1",
-  description: "",
   status: "publicado",
   featured: false,
 };
@@ -47,6 +65,7 @@ export default function AdminVehicleForm({ mode }) {
 
   const [form, setForm] = useState(EMPTY_FORM);
   const [images, setImages] = useState([]);
+  const [checks, setChecks] = useState(() => DEFAULT_CHECKS.map((c) => ({ ...c })));
   const [loading, setLoading] = useState(mode === "edit");
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -74,11 +93,13 @@ export default function AdminVehicleForm({ mode }) {
           fuel: vehicle.fuel || "",
           traction: vehicle.traction || "",
           owners: vehicle.owners != null ? String(vehicle.owners) : "1",
-          description: vehicle.description || "",
           status: vehicle.status || "publicado",
           featured: !!vehicle.featured,
         });
         setImages(vehicle.images || []);
+        setChecks(
+          vehicle.checks?.length ? vehicle.checks.map((c) => ({ ...c })) : DEFAULT_CHECKS.map((c) => ({ ...c }))
+        );
       })
       .catch(() => showToast("No pudimos cargar este vehículo."))
       .finally(() => setLoading(false));
@@ -124,6 +145,19 @@ export default function AdminVehicleForm({ mode }) {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const updateCheck = (index, field) => (e) => {
+    const { value } = e.target;
+    setChecks((prev) => prev.map((c, i) => (i === index ? { ...c, [field]: value } : c)));
+  };
+
+  const addCheck = () => {
+    setChecks((prev) => [...prev, { title: "", description: "" }]);
+  };
+
+  const removeCheck = (index) => {
+    setChecks((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const canSave = Boolean(form.name.trim()) && Boolean(form.price);
 
   const helperText = !canSave
@@ -154,8 +188,8 @@ export default function AdminVehicleForm({ mode }) {
       fuel: form.fuel,
       traction: form.traction,
       owners: form.owners ? Number(form.owners) : undefined,
-      description: form.description,
       images,
+      checks: checks.filter((c) => c.title.trim()),
       status: form.status,
       featured: form.featured,
     };
@@ -366,16 +400,54 @@ export default function AdminVehicleForm({ mode }) {
                   <span className="mono">Dueños anteriores</span>
                   <input type="number" min="0" value={form.owners} onChange={updateField("owners")} />
                 </label>
+              </div>
+            </section>
 
-                <label className="admin-vehicle-form__field admin-vehicle-form__field--span3">
-                  <span className="mono">Descripción para la web</span>
-                  <textarea
-                    rows={3}
-                    value={form.description}
-                    onChange={updateField("description")}
-                    placeholder="Único dueño, service oficial al día, cubiertas nuevas…"
-                  />
-                </label>
+            <section className="admin-vehicle-form__card">
+              <div className="admin-vehicle-form__card-head">
+                <span className="admin-vehicle-form__card-num">04</span>
+                <h2 className="admin-vehicle-form__card-title">Informe de la unidad</h2>
+                <span className="admin-vehicle-form__card-tag">
+                  {checks.length > 0 ? `${checks.length} ítems` : "Sin ítems"}
+                </span>
+              </div>
+
+              <p className="admin-vehicle-form__note">
+                Estos son los puntos que ve el comprador en la ficha del auto. Se cargan con los
+                de siempre, pero podés editarlos, borrarlos o agregar otros por vehículo.
+              </p>
+
+              <div className="admin-vehicle-form__checks">
+                {checks.map((check, i) => (
+                  <div key={i} className="admin-vehicle-form__check-row">
+                    <div className="admin-vehicle-form__check-fields">
+                      <input
+                        value={check.title}
+                        onChange={updateCheck(i, "title")}
+                        placeholder="Título (ej: Historial de service)"
+                        className="admin-vehicle-form__check-title"
+                      />
+                      <input
+                        value={check.description}
+                        onChange={updateCheck(i, "description")}
+                        placeholder="Descripción breve"
+                        className="admin-vehicle-form__check-desc"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="admin-vehicle-form__check-remove"
+                      onClick={() => removeCheck(i)}
+                      aria-label="Borrar ítem"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+
+                <button type="button" className="admin-vehicle-form__check-add" onClick={addCheck}>
+                  + Agregar ítem
+                </button>
               </div>
             </section>
           </div>

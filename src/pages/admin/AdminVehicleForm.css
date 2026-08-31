@@ -280,6 +280,92 @@
   display: none;
 }
 
+/* Informe de la unidad */
+.admin-vehicle-form__checks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-vehicle-form__check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.admin-vehicle-form__check-fields {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+}
+
+.admin-vehicle-form__check-fields input {
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--a-surface-2);
+  border: 1px solid var(--a-border-3);
+  border-radius: 9px;
+  padding: 11px 12px;
+  color: #f2f0ec;
+  font-family: var(--a-font);
+  font-size: 14px;
+  outline: none;
+}
+
+.admin-vehicle-form__check-fields input::placeholder {
+  color: #5c5c58;
+}
+
+.admin-vehicle-form__check-fields input:focus {
+  border-color: var(--a-accent);
+}
+
+.admin-vehicle-form__check-title {
+  font-weight: 600;
+}
+
+.admin-vehicle-form__check-remove {
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--a-border-3);
+  border-radius: 9px;
+  color: var(--a-text-2);
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-family: var(--a-font);
+}
+
+.admin-vehicle-form__check-remove:hover {
+  color: var(--a-danger);
+  border-color: #3a211b;
+}
+
+.admin-vehicle-form__check-add {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: transparent;
+  border: 1.5px dashed #33332f;
+  border-radius: 9px;
+  color: var(--a-text-2);
+  font-family: var(--a-font);
+  font-size: 13.5px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.admin-vehicle-form__check-add:hover {
+  border-color: var(--a-accent);
+  color: var(--a-accent);
+}
+
+@media (max-width: 720px) {
+  .admin-vehicle-form__check-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Sidebar */
 .admin-vehicle-form__side {
   position: sticky;

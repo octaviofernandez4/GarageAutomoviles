@@ -5,25 +5,6 @@ import useVehicles from "../hooks/useVehicles.js";
 import { decorateVehicle, formatMoney } from "../utils/format.js";
 import "./VehicleDetail.css";
 
-const CHECKS = [
-  {
-    t: "VIN y dominio auditados",
-    d: "Verificación policial hecha, libre de deuda, prendas y multas al día de publicación.",
-  },
-  {
-    t: "Historial de service",
-    d: "Mantenimientos documentados en concesionario oficial hasta el último control.",
-  },
-  {
-    t: "Peritaje de chapa y pintura",
-    d: "Medición de espesor en los 12 paneles. Sin rastros de choque estructural.",
-  },
-  {
-    t: "Test drive sin cargo",
-    d: "Podés manejarla acompañada por un asesor antes de decidir.",
-  },
-];
-
 const WHATSAPP_NUMBER = "5493810000000";
 
 export default function VehicleDetail() {
@@ -121,20 +102,22 @@ export default function VehicleDetail() {
             </div>
           </div>
 
-          <div className="detail-page__section">
-            <h2 className="detail-page__section-title">Informe de la unidad</h2>
-            <div className="detail-page__checks">
-              {CHECKS.map((check) => (
-                <div key={check.t} className="detail-page__check">
-                  <span className="detail-page__check-dot" aria-hidden="true" />
-                  <div>
-                    <div className="detail-page__check-title">{check.t}</div>
-                    <div className="detail-page__check-desc">{check.d}</div>
+          {current.checks?.length > 0 && (
+            <div className="detail-page__section">
+              <h2 className="detail-page__section-title">Informe de la unidad</h2>
+              <div className="detail-page__checks">
+                {current.checks.map((check, i) => (
+                  <div key={check.title + i} className="detail-page__check">
+                    <span className="detail-page__check-dot" aria-hidden="true" />
+                    <div>
+                      <div className="detail-page__check-title">{check.title}</div>
+                      <div className="detail-page__check-desc">{check.description}</div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <aside className="detail-page__aside">

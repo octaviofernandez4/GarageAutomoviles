@@ -1,3 +1,21 @@
+const DEFAULT_CHECKS = [
+  {
+    title: "VIN y dominio auditados",
+    description: "Verificación policial hecha, libre de deuda, prendas y multas al día de publicación.",
+  },
+  {
+    title: "Historial de service",
+    description: "Mantenimientos documentados en concesionario oficial hasta el último control.",
+  },
+  {
+    title: "Peritaje de chapa y pintura",
+    description: "Medición de espesor en los 12 paneles. Sin rastros de choque estructural.",
+  },
+  {
+    title: "Test drive sin cargo",
+    description: "Podés manejarla acompañada por un asesor antes de decidir.",
+  },
+];
 
 export const FALLBACK_VEHICLES = [
   {
@@ -16,6 +34,7 @@ export const FALLBACK_VEHICLES = [
     owners: 1,
     badge: "Recién ingresado",
     images: ["/vehicles/audi-q5.png"],
+    checks: DEFAULT_CHECKS,
   },
   {
     id: "raptor",
@@ -33,6 +52,7 @@ export const FALLBACK_VEHICLES = [
     owners: 1,
     badge: "Historial verificado",
     images: ["/vehicles/ranger-raptor.png"],
+    checks: DEFAULT_CHECKS,
   },
   {
     id: "territory",
@@ -50,6 +70,7 @@ export const FALLBACK_VEHICLES = [
     owners: 1,
     badge: "Service al día",
     images: ["/vehicles/territory.png"],
+    checks: DEFAULT_CHECKS,
   },
   {
     id: "bmw-x1",
@@ -67,6 +88,7 @@ export const FALLBACK_VEHICLES = [
     owners: 2,
     badge: "Historial verificado",
     images: ["/vehicles/bmw-x1.png"],
+    checks: DEFAULT_CHECKS,
   },
   {
     id: "yaris",
@@ -84,6 +106,7 @@ export const FALLBACK_VEHICLES = [
     owners: 1,
     badge: "Tomado en parte de pago",
     images: ["/vehicles/yaris.png"],
+    checks: DEFAULT_CHECKS,
   },
   {
     id: "polo",
@@ -101,5 +124,6 @@ export const FALLBACK_VEHICLES = [
     owners: 1,
     badge: "Service al día",
     images: ["/vehicles/polo.png"],
+    checks: DEFAULT_CHECKS,
   },
 ];
