@@ -6,9 +6,25 @@
   background: var(--ink);
 }
 
-.admin-login__card {
+.admin-login__wrap {
   width: 100%;
   max-width: 380px;
+}
+
+.admin-login__back {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--text-4);
+  font-size: 13px;
+  transition: color 0.15s ease;
+}
+
+.admin-login__back:hover {
+  color: var(--bone);
+}
+
+.admin-login__card {
+  width: 100%;
   border: 1px solid var(--line-2);
   background: var(--panel);
   padding: 32px;
@@ -33,11 +49,39 @@
 }
 
 .admin-login__field input {
+  width: 100%;
+  box-sizing: border-box;
   padding: 13px 14px;
   background: var(--ink);
   border: 1px solid var(--line-2);
   color: var(--bone);
   font-size: 14.5px;
+}
+
+.admin-login__password-wrap {
+  position: relative;
+}
+
+.admin-login__password-wrap input {
+  padding-right: 64px;
+}
+
+.admin-login__toggle-password {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-4);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.admin-login__toggle-password:hover {
+  color: var(--copper);
 }
 
 .admin-login__error {
