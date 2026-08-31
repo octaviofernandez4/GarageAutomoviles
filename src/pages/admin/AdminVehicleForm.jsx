@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Button from "../../components/Button/Button.jsx";
-import { fetchVehicleById } from "../../api/vehicles.js";
-import { createVehicle, updateVehicle } from "../../api/vehiclesAdmin.js";
+import { useNavigate, useParams, useOutletContext } from "react-router-dom";
+import { fetchAdminVehicles, createVehicle, updateVehicle } from "../../api/vehiclesAdmin.js";
 import { uploadImageToCloudinary } from "../../utils/cloudinary.js";
 import { slugify } from "../../utils/slugify.js";
 import { useAdminAuth } from "../../context/AdminAuthContext.jsx";
-import useVehicleMeta from "../../hooks/useVehicleMeta.js";
 import "./AdminVehicleForm.css";
 
+const BRANDS = ["Audi", "BMW", "Ford", "Toyota", "Volkswagen", "Chevrolet", "Peugeot", "Renault"];
+const BODIES = ["SUV", "Sedán", "Hatchback", "Pick-up", "Coupé", "Familiar"];
+const GEARBOXES = ["Automática", "Manual", "CVT"];
+const FUELS = ["Nafta", "Diésel", "Híbrido", "Eléctrico"];
+const TRACTIONS = ["4x2", "4x4", "AWD"];
+
+const STATUSES = [
+  { key: "publicado", label: "Publicado", desc: "Visible en la web" },
+  { key: "borrador", label: "Borrador", desc: "Solo vos lo ves" },
+  { key: "vendido", label: "Vendido", desc: "Marcado como vendido" },
+];
+
 const EMPTY_FORM = {
-  id: "",
   name: "",
   brand: "",
   body: "",
@@ -19,68 +27,69 @@ const EMPTY_FORM = {
   km: "",
   engine: "",
   gearbox: "",
-  auto: false,
   fuel: "",
   traction: "",
   owners: "1",
-  badge: "",
+  description: "",
+  status: "publicado",
+  featured: false,
 };
+
+function formatMoney(value) {
+  return `US$ ${Number(value).toLocaleString("es-AR")}`;
+}
 
 export default function AdminVehicleForm({ mode }) {
   const { id } = useParams();
   const { token } = useAdminAuth();
-  const meta = useVehicleMeta();
+  const { showToast } = useOutletContext();
   const navigate = useNavigate();
 
   const [form, setForm] = useState(EMPTY_FORM);
   const [images, setImages] = useState([]);
-  const [idTouched, setIdTouched] = useState(mode === "edit");
   const [loading, setLoading] = useState(mode === "edit");
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     if (mode !== "edit") return;
 
-    fetchVehicleById(id)
-      .then((vehicle) => {
+    fetchAdminVehicles(token)
+      .then((list) => {
+        const vehicle = list.find((v) => v.id === id);
+        if (!vehicle) {
+          showToast("No encontramos ese vehículo.");
+          navigate("/admin");
+          return;
+        }
         setForm({
-          id: vehicle.id,
-          name: vehicle.name,
-          brand: vehicle.brand,
-          body: vehicle.body,
-          year: String(vehicle.year),
-          price: String(vehicle.price),
-          km: String(vehicle.km),
-          engine: vehicle.engine,
-          gearbox: vehicle.gearbox,
-          auto: vehicle.auto,
-          fuel: vehicle.fuel,
-          traction: vehicle.traction,
-          owners: String(vehicle.owners),
-          badge: vehicle.badge,
+          name: vehicle.name || "",
+          brand: vehicle.brand || "",
+          body: vehicle.body || "",
+          year: vehicle.year ? String(vehicle.year) : "",
+          price: vehicle.price ? String(vehicle.price) : "",
+          km: vehicle.km ? String(vehicle.km) : "",
+          engine: vehicle.engine || "",
+          gearbox: vehicle.gearbox || "",
+          fuel: vehicle.fuel || "",
+          traction: vehicle.traction || "",
+          owners: vehicle.owners != null ? String(vehicle.owners) : "1",
+          description: vehicle.description || "",
+          status: vehicle.status || "publicado",
+          featured: !!vehicle.featured,
         });
         setImages(vehicle.images || []);
       })
-      .catch(() => setError("No pudimos cargar este vehículo."))
+      .catch(() => showToast("No pudimos cargar este vehículo."))
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, id]);
 
-  const updateField = (field) => (e) => {
-    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    setForm((prev) => {
-      const next = { ...prev, [field]: value };
-      if (field === "name" && !idTouched) {
-        next.id = slugify(value);
-      }
-      return next;
-    });
-  };
+  const slug = mode === "create" ? slugify(form.name) || "nombre-del-auto" : id;
 
-  const handleIdChange = (e) => {
-    setIdTouched(true);
-    setForm((prev) => ({ ...prev, id: slugify(e.target.value) }));
+  const updateField = (field) => (e) => {
+    const { value } = e.target;
+    setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleFiles = async (e) => {
@@ -88,7 +97,6 @@ export default function AdminVehicleForm({ mode }) {
     e.target.value = "";
     if (files.length === 0) return;
 
-    setError("");
     setUploading(true);
     try {
       const uploaded = [];
@@ -97,54 +105,73 @@ export default function AdminVehicleForm({ mode }) {
       }
       setImages((prev) => [...prev, ...uploaded]);
     } catch (err) {
-      setError(err.message);
+      showToast(err.message);
     } finally {
       setUploading(false);
     }
+  };
+
+  const makeCover = (index) => {
+    setImages((prev) => {
+      const next = [...prev];
+      const [item] = next.splice(index, 1);
+      next.unshift(item);
+      return next;
+    });
   };
 
   const removeImage = (index) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const moveImage = (index, direction) => {
-    setImages((prev) => {
-      const next = [...prev];
-      const target = index + direction;
-      if (target < 0 || target >= next.length) return prev;
-      [next[index], next[target]] = [next[target], next[index]];
-      return next;
-    });
-  };
+  const canSave = Boolean(form.name.trim()) && Boolean(form.price);
+
+  const helperText = !canSave
+    ? "Necesitás al menos nombre y precio."
+    : form.status === "publicado"
+      ? "Se va a ver en la web al guardar."
+      : "Queda guardado sin publicarse.";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
-    if (images.length === 0) {
-      setError("Subí al menos una foto.");
+    if (!canSave) {
+      showToast("Falta el nombre o el precio");
       return;
     }
 
     const payload = {
-      ...form,
-      year: Number(form.year),
+      id: slug,
+      name: form.name.trim(),
+      brand: form.brand,
+      body: form.body,
+      year: form.year ? Number(form.year) : undefined,
       price: Number(form.price),
-      km: Number(form.km),
-      owners: Number(form.owners),
+      km: form.km ? Number(form.km) : undefined,
+      engine: form.engine,
+      gearbox: form.gearbox,
+      auto: form.gearbox !== "Manual",
+      fuel: form.fuel,
+      traction: form.traction,
+      owners: form.owners ? Number(form.owners) : undefined,
+      description: form.description,
       images,
+      status: form.status,
+      featured: form.featured,
     };
 
     setSubmitting(true);
     try {
       if (mode === "create") {
         await createVehicle(token, payload);
+        showToast("Vehículo agregado al stock");
       } else {
         await updateVehicle(token, id, payload);
+        showToast("Cambios guardados");
       }
       navigate("/admin");
     } catch (err) {
-      setError(err.message);
+      showToast(err.message);
     } finally {
       setSubmitting(false);
     }
@@ -154,138 +181,261 @@ export default function AdminVehicleForm({ mode }) {
     return <p className="admin-vehicles__state">Cargando...</p>;
   }
 
+  const previewName = form.name || "Nombre del vehículo";
+  const previewMeta =
+    form.brand || form.body || form.year
+      ? `${form.brand || "Marca"} · ${form.body || "Carrocería"} · ${form.year || "Año"}`
+      : "Marca · Carrocería · Año";
+  const previewPrice = form.price ? formatMoney(form.price) : "US$ —";
+
   return (
     <div className="admin-vehicle-form">
+      <button type="button" className="admin-vehicle-form__back" onClick={() => navigate("/admin")}>
+        ← Volver al stock
+      </button>
+
       <h1 className="admin-vehicle-form__title">
-        {mode === "create" ? "Nuevo vehículo" : `Editar: ${form.name}`}
+        {mode === "create" ? "Nuevo vehículo" : "Editar vehículo"}
       </h1>
+      <p className="admin-vehicle-form__subtitle">
+        Completá lo básico y guardá. Podés agregar la ficha técnica después.
+      </p>
 
       <form onSubmit={handleSubmit}>
-        <div className="admin-vehicle-form__grid">
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Nombre</span>
-            <input value={form.name} onChange={updateField("name")} required />
-          </label>
+        <div className="admin-vehicle-form__layout">
+          <div className="admin-vehicle-form__main">
+            <section className="admin-vehicle-form__card">
+              <div className="admin-vehicle-form__card-head">
+                <span className="admin-vehicle-form__card-num">01</span>
+                <h2 className="admin-vehicle-form__card-title">Datos principales</h2>
+                <span className="admin-vehicle-form__card-tag">Obligatorios</span>
+              </div>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">ID / slug</span>
-            <input
-              value={form.id}
-              onChange={handleIdChange}
-              disabled={mode === "edit"}
-              required
-            />
-          </label>
+              <div className="admin-vehicle-form__grid-2">
+                <label className="admin-vehicle-form__field admin-vehicle-form__field--span2">
+                  <span className="mono">Nombre del vehículo</span>
+                  <input value={form.name} onChange={updateField("name")} placeholder="Ej: Ford Ranger Raptor" />
+                  <span className="admin-vehicle-form__hint mono">URL en la web: /stock/{slug}</span>
+                </label>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Marca</span>
-            <input value={form.brand} onChange={updateField("brand")} list="brand-options" required />
-            <datalist id="brand-options">
-              {meta.brands.map((b) => (
-                <option key={b} value={b} />
-              ))}
-            </datalist>
-          </label>
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Marca</span>
+                  <input value={form.brand} onChange={updateField("brand")} list="admin-brands" placeholder="Ford" />
+                  <datalist id="admin-brands">
+                    {BRANDS.map((b) => (
+                      <option key={b} value={b} />
+                    ))}
+                  </datalist>
+                </label>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Carrocería</span>
-            <input value={form.body} onChange={updateField("body")} list="body-options" required />
-            <datalist id="body-options">
-              {meta.bodies.map((b) => (
-                <option key={b} value={b} />
-              ))}
-            </datalist>
-          </label>
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Carrocería</span>
+                  <select value={form.body} onChange={updateField("body")}>
+                    <option value="">Elegir…</option>
+                    {BODIES.map((b) => (
+                      <option key={b} value={b}>
+                        {b}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Año</span>
-            <input type="number" value={form.year} onChange={updateField("year")} required />
-          </label>
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Año</span>
+                  <input type="number" value={form.year} onChange={updateField("year")} placeholder="2023" />
+                </label>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Precio (USD)</span>
-            <input type="number" value={form.price} onChange={updateField("price")} required />
-          </label>
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Precio en dólares</span>
+                  <div className="admin-vehicle-form__price-wrap">
+                    <span className="admin-vehicle-form__price-prefix">US$</span>
+                    <input
+                      type="number"
+                      value={form.price}
+                      onChange={updateField("price")}
+                      placeholder="42.500"
+                      className="admin-vehicle-form__price-input"
+                    />
+                  </div>
+                </label>
+              </div>
+            </section>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Kilómetros</span>
-            <input type="number" value={form.km} onChange={updateField("km")} required />
-          </label>
+            <section className="admin-vehicle-form__card">
+              <div className="admin-vehicle-form__card-head">
+                <span className="admin-vehicle-form__card-num">02</span>
+                <h2 className="admin-vehicle-form__card-title">Fotos</h2>
+                <span className="admin-vehicle-form__card-tag">
+                  {images.length > 0 ? `${images.length} fotos` : "Sin fotos todavía"}
+                </span>
+              </div>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Motor</span>
-            <input value={form.engine} onChange={updateField("engine")} required />
-          </label>
+              <p className="admin-vehicle-form__note">
+                La primera foto es la portada. Arrastrá para reordenar o marcá otra como portada.
+              </p>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Caja</span>
-            <input value={form.gearbox} onChange={updateField("gearbox")} required />
-          </label>
+              <div className="admin-vehicle-form__photos">
+                {images.map((src, i) => (
+                  <div
+                    key={src + i}
+                    className={`admin-vehicle-form__photo ${i === 0 ? "admin-vehicle-form__photo--cover" : ""}`}
+                  >
+                    <img src={src} alt="" />
+                    <span className="admin-vehicle-form__photo-index mono">{String(i + 1).padStart(2, "0")}</span>
+                    {i === 0 && <span className="admin-vehicle-form__photo-badge">Portada</span>}
+                    <div className="admin-vehicle-form__photo-actions">
+                      {i !== 0 && (
+                        <button type="button" onClick={() => makeCover(i)}>
+                          Portada
+                        </button>
+                      )}
+                      <button type="button" onClick={() => removeImage(i)}>
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))}
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Combustible</span>
-            <input value={form.fuel} onChange={updateField("fuel")} required />
-          </label>
+                <label className="admin-vehicle-form__upload">
+                  <span className="admin-vehicle-form__upload-plus" aria-hidden="true">
+                    +
+                  </span>
+                  {uploading ? "Subiendo..." : "Agregar fotos"}
+                  <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={uploading} />
+                </label>
+              </div>
+            </section>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Tracción</span>
-            <input value={form.traction} onChange={updateField("traction")} required />
-          </label>
+            <section className="admin-vehicle-form__card">
+              <div className="admin-vehicle-form__card-head">
+                <span className="admin-vehicle-form__card-num">03</span>
+                <h2 className="admin-vehicle-form__card-title">Ficha técnica</h2>
+                <span className="admin-vehicle-form__card-tag">Opcional</span>
+              </div>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Dueños anteriores</span>
-            <input type="number" min="0" value={form.owners} onChange={updateField("owners")} required />
-          </label>
+              <p className="admin-vehicle-form__note">Lo que dejes vacío no aparece en la ficha del auto.</p>
 
-          <label className="admin-vehicle-form__field">
-            <span className="mono">Badge</span>
-            <input value={form.badge} onChange={updateField("badge")} required />
-          </label>
-        </div>
+              <div className="admin-vehicle-form__grid-3">
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Kilómetros</span>
+                  <input type="number" value={form.km} onChange={updateField("km")} placeholder="35.000" />
+                </label>
 
-        <label className="admin-vehicle-form__checkbox">
-          <input type="checkbox" checked={form.auto} onChange={updateField("auto")} />
-          Caja automática
-        </label>
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Motor</span>
+                  <input value={form.engine} onChange={updateField("engine")} placeholder="2.0 turbo nafta" />
+                </label>
 
-        <div className="admin-vehicle-form__photos">
-          <span className="mono">Fotos ({images.length}) — la primera es la portada</span>
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Caja</span>
+                  <select value={form.gearbox} onChange={updateField("gearbox")}>
+                    <option value="">Elegir…</option>
+                    {GEARBOXES.map((g) => (
+                      <option key={g} value={g}>
+                        {g}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-          <div className="admin-vehicle-form__gallery">
-            {images.map((src, i) => (
-              <div key={src + i} className="admin-vehicle-form__photo">
-                <img src={src} alt="" />
-                {i === 0 && <span className="admin-vehicle-form__cover mono">Portada</span>}
-                <div className="admin-vehicle-form__photo-actions">
-                  <button type="button" onClick={() => moveImage(i, -1)} disabled={i === 0}>
-                    ←
-                  </button>
-                  <button type="button" onClick={() => removeImage(i)}>
-                    ✕
-                  </button>
-                  <button type="button" onClick={() => moveImage(i, 1)} disabled={i === images.length - 1}>
-                    →
-                  </button>
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Combustible</span>
+                  <select value={form.fuel} onChange={updateField("fuel")}>
+                    <option value="">Elegir…</option>
+                    {FUELS.map((f) => (
+                      <option key={f} value={f}>
+                        {f}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Tracción</span>
+                  <select value={form.traction} onChange={updateField("traction")}>
+                    <option value="">Elegir…</option>
+                    {TRACTIONS.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="admin-vehicle-form__field">
+                  <span className="mono">Dueños anteriores</span>
+                  <input type="number" min="0" value={form.owners} onChange={updateField("owners")} />
+                </label>
+
+                <label className="admin-vehicle-form__field admin-vehicle-form__field--span3">
+                  <span className="mono">Descripción para la web</span>
+                  <textarea
+                    rows={3}
+                    value={form.description}
+                    onChange={updateField("description")}
+                    placeholder="Único dueño, service oficial al día, cubiertas nuevas…"
+                  />
+                </label>
+              </div>
+            </section>
+          </div>
+
+          <aside className="admin-vehicle-form__side">
+            <div className="admin-vehicle-form__side-card">
+              <span className="admin-vehicle-form__side-label mono">Así se ve en la web</span>
+              <div className="admin-vehicle-form__preview">
+                <div className="admin-vehicle-form__preview-photo">
+                  {images[0] ? <img src={images[0]} alt="" /> : <span className="mono">Sin foto</span>}
+                </div>
+                <div className="admin-vehicle-form__preview-body">
+                  <div className="admin-vehicle-form__preview-name">{previewName}</div>
+                  <div className="admin-vehicle-form__preview-meta mono">{previewMeta}</div>
+                  <div className="admin-vehicle-form__preview-price">{previewPrice}</div>
                 </div>
               </div>
-            ))}
+            </div>
 
-            <label className="admin-vehicle-form__upload">
-              {uploading ? "Subiendo..." : "+ Agregar fotos"}
-              <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={uploading} />
-            </label>
-          </div>
-        </div>
+            <div className="admin-vehicle-form__side-card">
+              <span className="admin-vehicle-form__side-label mono">Publicación</span>
+              <div className="admin-vehicle-form__publish-options">
+                {STATUSES.map((s) => (
+                  <button
+                    key={s.key}
+                    type="button"
+                    className={`admin-vehicle-form__publish-option admin-vehicle-form__publish-option--${s.key} ${
+                      form.status === s.key ? "admin-vehicle-form__publish-option--active" : ""
+                    }`}
+                    onClick={() => setForm((prev) => ({ ...prev, status: s.key }))}
+                  >
+                    <span className="admin-vehicle-form__publish-dot" aria-hidden="true" />
+                    {s.label}
+                    <span className="admin-vehicle-form__publish-desc">{s.desc}</span>
+                  </button>
+                ))}
+              </div>
 
-        {error && <p className="admin-vehicle-form__error">{error}</p>}
+              <button
+                type="button"
+                className={`admin-vehicle-form__featured ${
+                  form.featured ? "admin-vehicle-form__featured--active" : ""
+                }`}
+                onClick={() => setForm((prev) => ({ ...prev, featured: !prev.featured }))}
+              >
+                <span className="admin-vehicle-form__checkbox" aria-hidden="true">
+                  {form.featured && "✓"}
+                </span>
+                Destacar en la portada
+              </button>
+            </div>
 
-        <div className="admin-vehicle-form__actions">
-          <Button type="submit" variant="copper" disabled={submitting || uploading}>
-            {submitting ? "Guardando..." : "Guardar"}
-          </Button>
-          <Button type="button" variant="outline" onClick={() => navigate("/admin")}>
-            Cancelar
-          </Button>
+            <button type="submit" className="admin-vehicle-form__save" disabled={submitting || uploading}>
+              {submitting ? "Guardando..." : "Guardar vehículo"}
+            </button>
+            <button type="button" className="admin-vehicle-form__cancel" onClick={() => navigate("/admin")}>
+              Cancelar
+            </button>
+            <p className="admin-vehicle-form__helper">{helperText}</p>
+          </aside>
         </div>
       </form>
     </div>

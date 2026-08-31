@@ -1,10 +1,97 @@
-.admin-vehicle-form__title {
-  font-size: 26px;
-  letter-spacing: -0.03em;
-  margin-bottom: 24px;
+.admin-vehicle-form {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 32px 100px;
 }
 
-.admin-vehicle-form__grid {
+.admin-vehicle-form__back {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--a-text-2);
+  font-family: var(--a-font);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+
+.admin-vehicle-form__back:hover {
+  color: #f2f0ec;
+}
+
+.admin-vehicle-form__title {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.admin-vehicle-form__subtitle {
+  font-size: 14px;
+  color: var(--a-text-2);
+  margin: 8px 0 28px;
+}
+
+.admin-vehicle-form__layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.admin-vehicle-form__main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-vehicle-form__card {
+  border: 1px solid var(--a-border-1);
+  border-radius: 14px;
+  background: var(--a-card);
+  padding: 24px;
+}
+
+.admin-vehicle-form__card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.admin-vehicle-form__card-num {
+  font-family: var(--a-font-mono);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--a-accent);
+}
+
+.admin-vehicle-form__card-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.admin-vehicle-form__card-tag {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--a-text-3);
+}
+
+.admin-vehicle-form__note {
+  font-size: 13px;
+  color: var(--a-text-2);
+  margin: 0 0 18px;
+}
+
+.admin-vehicle-form__grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.admin-vehicle-form__grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -13,59 +100,101 @@
 .admin-vehicle-form__field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
 }
 
-.admin-vehicle-form__field .mono {
-  font-size: 9.5px;
-  color: var(--text-4);
+.admin-vehicle-form__field--span2 {
+  grid-column: span 2;
 }
 
-.admin-vehicle-form__field input {
+.admin-vehicle-form__field--span3 {
+  grid-column: span 3;
+}
+
+.admin-vehicle-form__field > .mono {
+  font-family: var(--a-font-mono);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--a-text-2);
+}
+
+.admin-vehicle-form__field input,
+.admin-vehicle-form__field select,
+.admin-vehicle-form__field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--a-surface-2);
+  border: 1px solid var(--a-border-3);
+  border-radius: 9px;
   padding: 12px 13px;
-  background: var(--panel);
-  border: 1px solid var(--line-2);
-  color: var(--bone);
-  font-size: 14px;
+  color: #f2f0ec;
+  font-family: var(--a-font);
+  font-size: 15px;
+  outline: none;
 }
 
-.admin-vehicle-form__field input:disabled {
-  opacity: 0.6;
+.admin-vehicle-form__field textarea {
+  line-height: 1.5;
+  resize: vertical;
 }
 
-.admin-vehicle-form__checkbox {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-  font-size: 14px;
-  color: var(--text-2);
+.admin-vehicle-form__field input::placeholder,
+.admin-vehicle-form__field textarea::placeholder {
+  color: #5c5c58;
 }
 
+.admin-vehicle-form__field input:focus,
+.admin-vehicle-form__field select:focus,
+.admin-vehicle-form__field textarea:focus {
+  border-color: var(--a-accent);
+}
+
+.admin-vehicle-form__hint {
+  font-family: var(--a-font-mono);
+  font-size: 11px;
+  color: #5c5c58;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.admin-vehicle-form__price-wrap {
+  position: relative;
+}
+
+.admin-vehicle-form__price-prefix {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--a-text-3);
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.admin-vehicle-form__price-input {
+  padding-left: 48px !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Photos */
 .admin-vehicle-form__photos {
-  margin-top: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.admin-vehicle-form__photos > .mono {
-  font-size: 9.5px;
-  color: var(--text-4);
-}
-
-.admin-vehicle-form__gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 
 .admin-vehicle-form__photo {
   position: relative;
   aspect-ratio: 4 / 3;
+  border-radius: 10px;
   overflow: hidden;
-  border: 1px solid var(--line-2);
-  background: var(--card);
+  border: 1px solid #262624;
+}
+
+.admin-vehicle-form__photo--cover {
+  border-color: var(--a-accent);
 }
 
 .admin-vehicle-form__photo img {
@@ -75,83 +204,322 @@
   display: block;
 }
 
-.admin-vehicle-form__cover {
+.admin-vehicle-form__photo-index {
   position: absolute;
-  top: 6px;
-  left: 6px;
-  background: rgba(11, 11, 12, 0.75);
-  color: var(--copper-lit);
-  font-size: 9px;
-  padding: 3px 6px;
+  top: 8px;
+  left: 8px;
+  font-family: var(--a-font-mono);
+  font-size: 10px;
+  color: #8a8a85;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.admin-vehicle-form__photo-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--a-accent);
+  color: #101010;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
 }
 
 .admin-vehicle-form__photo-actions {
   position: absolute;
   inset: auto 0 0 0;
   display: flex;
-  background: rgba(11, 11, 12, 0.75);
+  gap: 6px;
+  padding: 6px;
 }
 
 .admin-vehicle-form__photo-actions button {
   flex: 1;
+  background: rgba(10, 10, 10, 0.8);
+  border: 1px solid #33332f;
+  border-radius: 6px;
+  color: #f2f0ec;
+  font-family: var(--a-font);
+  font-size: 11px;
   padding: 6px 0;
-  background: transparent;
-  border: none;
-  color: var(--bone);
   cursor: pointer;
-  font-size: 13px;
 }
 
-.admin-vehicle-form__photo-actions button:hover:not(:disabled) {
-  background: rgba(224, 167, 94, 0.2);
-}
-
-.admin-vehicle-form__photo-actions button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+.admin-vehicle-form__photo-actions button:hover {
+  border-color: var(--a-accent);
 }
 
 .admin-vehicle-form__upload {
   aspect-ratio: 4 / 3;
-  display: grid;
-  place-items: center;
-  border: 1px dashed var(--line-3);
-  color: var(--text-4);
+  border-radius: 10px;
+  border: 1.5px dashed #33332f;
+  color: var(--a-text-2);
   font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   cursor: pointer;
   text-align: center;
-  padding: 8px;
+}
+
+.admin-vehicle-form__upload-plus {
+  font-size: 20px;
 }
 
 .admin-vehicle-form__upload:hover {
-  border-color: var(--copper);
-  color: var(--bone);
+  border-color: var(--a-accent);
+  color: var(--a-accent);
 }
 
 .admin-vehicle-form__upload input {
   display: none;
 }
 
-.admin-vehicle-form__error {
-  margin-top: 18px;
-  color: var(--rust);
-  font-size: 13.5px;
-}
-
-.admin-vehicle-form__actions {
+/* Sidebar */
+.admin-vehicle-form__side {
+  position: sticky;
+  top: 96px;
   display: flex;
-  gap: 12px;
-  margin-top: 28px;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.admin-vehicle-form__actions button {
-  padding: 13px 24px;
-  font-size: 14.5px;
+.admin-vehicle-form__side-card {
+  border: 1px solid var(--a-border-1);
+  border-radius: 14px;
+  background: var(--a-card);
+  padding: 20px;
+}
+
+.admin-vehicle-form__side-label {
+  display: block;
+  font-family: var(--a-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--a-text-2);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.admin-vehicle-form__preview {
+  border: 1px solid var(--a-border-2);
+  border-radius: 11px;
+  background: var(--a-surface);
+  overflow: hidden;
+}
+
+.admin-vehicle-form__preview-photo {
+  aspect-ratio: 16 / 10;
+  background: repeating-linear-gradient(135deg, #1c1c1a 0 6px, #232321 6px 12px);
+  display: grid;
+  place-items: center;
+}
+
+.admin-vehicle-form__preview-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.admin-vehicle-form__preview-photo .mono {
+  font-family: var(--a-font-mono);
+  font-size: 11px;
+  color: #5c5c58;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-vehicle-form__preview-body {
+  padding: 14px;
+}
+
+.admin-vehicle-form__preview-name {
   font-weight: 600;
+  font-size: 15px;
 }
 
-@media (max-width: 720px) {
-  .admin-vehicle-form__grid {
+.admin-vehicle-form__preview-meta {
+  font-family: var(--a-font-mono);
+  font-size: 10px;
+  color: #7c7c77;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.admin-vehicle-form__preview-price {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--a-accent);
+  font-variant-numeric: tabular-nums;
+  margin-top: 8px;
+}
+
+.admin-vehicle-form__publish-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-vehicle-form__publish-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 9px;
+  padding: 11px 13px;
+  font-size: 14px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--a-border-3);
+  color: #f2f0ec;
+  font-family: var(--a-font);
+  cursor: pointer;
+}
+
+.admin-vehicle-form__publish-desc {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--a-text-3);
+}
+
+.admin-vehicle-form__publish-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--a-text-4);
+  flex: none;
+}
+
+.admin-vehicle-form__publish-option--publicado .admin-vehicle-form__publish-dot {
+  background: var(--a-success);
+}
+
+.admin-vehicle-form__publish-option--borrador .admin-vehicle-form__publish-dot {
+  background: var(--a-warning);
+}
+
+.admin-vehicle-form__publish-option--vendido .admin-vehicle-form__publish-dot {
+  background: var(--a-danger);
+}
+
+.admin-vehicle-form__publish-option--publicado.admin-vehicle-form__publish-option--active {
+  border-color: var(--a-success);
+  background: rgba(127, 176, 105, 0.12);
+}
+
+.admin-vehicle-form__publish-option--borrador.admin-vehicle-form__publish-option--active {
+  border-color: var(--a-warning);
+  background: rgba(185, 153, 95, 0.12);
+}
+
+.admin-vehicle-form__publish-option--vendido.admin-vehicle-form__publish-option--active {
+  border-color: var(--a-danger);
+  background: rgba(224, 103, 74, 0.12);
+}
+
+.admin-vehicle-form__featured {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  border: 1px solid var(--a-border-3);
+  border-radius: 9px;
+  padding: 11px 13px;
+  background: transparent;
+  color: #c9c7c2;
+  font-family: var(--a-font);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.admin-vehicle-form__checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #4a4a46;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  color: #101010;
+  flex: none;
+}
+
+.admin-vehicle-form__featured--active .admin-vehicle-form__checkbox {
+  background: var(--a-accent);
+  border-color: var(--a-accent);
+}
+
+.admin-vehicle-form__save {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--a-accent);
+  border: none;
+  border-radius: 10px;
+  color: #101010;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px;
+  cursor: pointer;
+  font-family: var(--a-font);
+}
+
+.admin-vehicle-form__save:hover:not(:disabled) {
+  background: var(--a-accent-hover);
+}
+
+.admin-vehicle-form__save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-vehicle-form__cancel {
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  border: 1px solid var(--a-border-3);
+  border-radius: 10px;
+  color: #c9c7c2;
+  font-size: 14px;
+  padding: 12px;
+  cursor: pointer;
+  font-family: var(--a-font);
+}
+
+.admin-vehicle-form__helper {
+  font-size: 12px;
+  color: #6b6b66;
+  text-align: center;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .admin-vehicle-form__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-vehicle-form__side {
+    position: static;
+  }
+
+  .admin-vehicle-form__grid-2,
+  .admin-vehicle-form__grid-3 {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-vehicle-form__field--span2,
+  .admin-vehicle-form__field--span3 {
+    grid-column: span 2;
+  }
+
+  .admin-vehicle-form__photos {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

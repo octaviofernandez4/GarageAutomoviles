@@ -19,7 +19,10 @@ async function request(method, path, token, body) {
   return data;
 }
 
+export const fetchAdminVehicles = (token) => request("GET", "/api/vehicles/admin", token);
 export const createVehicle = (token, payload) => request("POST", "/api/vehicles", token, payload);
 export const updateVehicle = (token, id, payload) =>
   request("PUT", `/api/vehicles/${id}`, token, payload);
+export const setVehicleStatus = (token, id, status) =>
+  request("PATCH", `/api/vehicles/${id}/status`, token, { status });
 export const deleteVehicle = (token, id) => request("DELETE", `/api/vehicles/${id}`, token);
