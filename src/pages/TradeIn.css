@@ -68,6 +68,25 @@
   letter-spacing: -0.03em;
 }
 
+.trade-page__target {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: rgba(224, 167, 94, 0.12);
+  border: 1px solid rgba(224, 167, 94, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trade-page__target .mono {
+  font-size: 9.5px;
+  color: var(--copper);
+}
+
+.trade-page__target strong {
+  font-size: 15.5px;
+}
+
 .trade-page__fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -102,36 +121,105 @@
   color: var(--text-5);
 }
 
-.trade-page__estado {
-  margin-top: 22px;
+.trade-page__field textarea {
+  padding: 13px 14px;
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--bone);
+  font-size: 14.5px;
+  font-family: var(--font-body);
+  resize: vertical;
 }
 
-.trade-page__estado > .mono {
+.trade-page__field textarea::placeholder {
+  color: var(--text-5);
+}
+
+.trade-page__section-label {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  color: var(--text-4);
+}
+
+.trade-page__option-group {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trade-page__option-group > .mono {
   font-size: 9.5px;
   color: var(--text-4);
 }
 
-.trade-page__estado-chips {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
+.trade-page__option-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-.trade-page__chip {
-  padding: 8px 12px;
-  font-size: 12.5px;
+.trade-page__option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 10px;
+  background: var(--ink);
   border: 1px solid var(--line-2);
-  background: transparent;
   color: var(--text-2);
   font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.trade-page__chip--active {
+.trade-page__option-card svg {
+  color: var(--text-4);
+  transition: color 0.15s ease;
+}
+
+.trade-page__option-card small {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--text-5);
+}
+
+.trade-page__option-card--active {
   border-color: var(--copper);
-  background: rgba(224, 167, 94, 0.16);
+  background: rgba(224, 167, 94, 0.14);
   color: var(--bone);
+}
+
+.trade-page__option-card--active svg {
+  color: var(--copper);
+}
+
+.trade-page__tires {
+  padding: 4px 4px 0;
+}
+
+.trade-page__tires input[type="range"] {
+  width: 100%;
+  accent-color: var(--copper);
+  cursor: pointer;
+}
+
+.trade-page__tires-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 10.5px;
+  color: var(--text-5);
+}
+
+.trade-page__tires-label--active {
+  color: var(--copper);
+  font-weight: 600;
 }
 
 .trade-page__submit {
@@ -210,6 +298,10 @@
   }
 
   .trade-page__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .trade-page__option-cards {
     grid-template-columns: 1fr;
   }
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button.jsx";
 import { useAdminAuth } from "../../context/AdminAuthContext.jsx";
+import "./adminTheme.css";
 import "./AdminLogin.css";
 
 export default function AdminLogin() {

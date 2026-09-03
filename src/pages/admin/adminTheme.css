@@ -1,0 +1,108 @@
+:root {
+  --a-bg: #0a0a0a;
+  --a-card: #1b1b19;
+  --a-surface: #121211;
+  --a-surface-2: #141413;
+  --a-border-1: #292925;
+  --a-border-2: #2f2f2b;
+  --a-border-3: #363632;
+  --a-border-4: #3d3d38;
+  --a-text: #f2f0ec;
+  --a-text-2: #8a8a85;
+  --a-text-3: #7c7c77;
+  --a-text-4: #6b6b66;
+  --a-text-5: #5c5c58;
+  --a-accent: #e8933d;
+  --a-accent-hover: #f5a752;
+  --a-success: #7fb069;
+  --a-danger: #e0674a;
+  --a-warning: #b9995f;
+  --a-font: "Archivo", sans-serif;
+  --a-font-mono: "IBM Plex Mono", monospace;
+
+  --a-sidebar-w: 240px;
+  --a-sidebar-w-rail: 76px;
+  --a-topbar-h: 72px;
+}
+
+/* Shared admin modal (used by vehicle list, vehicle form, etc.) */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.72);
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.admin-modal {
+  width: 100%;
+  max-width: 420px;
+  background: #121211;
+  border: 1px solid var(--a-border-3);
+  border-radius: 16px;
+  padding: 26px;
+  font-family: var(--a-font);
+}
+
+.admin-modal__title {
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #f2f0ec;
+}
+
+.admin-modal__text {
+  font-size: 14px;
+  color: var(--a-text-2);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.admin-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.admin-modal__cancel {
+  background: transparent;
+  border: 1px solid var(--a-border-3);
+  border-radius: 9px;
+  padding: 11px 18px;
+  color: #c9c7c2;
+  font-family: var(--a-font);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.admin-modal__confirm {
+  background: var(--a-danger);
+  border: none;
+  border-radius: 9px;
+  padding: 11px 18px;
+  color: #0f0f0f;
+  font-weight: 600;
+  font-family: var(--a-font);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.admin-modal__confirm:hover {
+  background: #ee7a5d;
+}
+
+.admin-modal__confirm:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.admin-modal__confirm--accent {
+  background: var(--a-accent);
+}
+
+.admin-modal__confirm--accent:hover {
+  background: var(--a-accent-hover);
+}

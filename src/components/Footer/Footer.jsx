@@ -14,7 +14,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <img src="/GarageAutomoviles.jpg" alt="El Garage Automóviles" className="footer__logo" />
+          <img src="/ElGarage.jpg" alt="El Garage Automóviles" className="footer__logo" />
           <p className="footer__tagline">
             Usados seleccionados con historial verificado. Av. Aconquija 1763, Yerba Buena, Tucumán.
           </p>

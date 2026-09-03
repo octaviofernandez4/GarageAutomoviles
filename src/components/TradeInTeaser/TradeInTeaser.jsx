@@ -5,8 +5,7 @@ export default function TradeInTeaser() {
   return (
     <section className="trade-teaser">
       <div className="container trade-teaser__grid">
-        <div className="trade-teaser__copy">
-          <div className="overline">03 — Parte de pago</div>
+        <div className="trade-teaser__copy">         
           <h2 className="trade-teaser__title">
             Tu usado vale más
             <br />

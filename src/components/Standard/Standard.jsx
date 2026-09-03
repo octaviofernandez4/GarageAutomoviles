@@ -2,22 +2,22 @@ import "./Standard.css";
 
 const STANDARDS = [
   {
-    num: "01",
+    
     title: "Historial verificado, no declarado",
     desc: "Auditamos VIN, dominio, deuda de patentes e infracciones antes de publicar. El informe se te entrega impreso.",
   },
   {
-    num: "02",
+    
     title: "Precio publicado y final",
     desc: "Lo que ves es lo que pagás: transferencia y verificación policial incluidas en el valor.",
   },
   {
-    num: "03",
+    
     title: "Financiación propia y bancaria",
     desc: "Armamos el plan con lo que puedas poner de anticipo. Aprobación crediticia en el día.",
   },
   {
-    num: "04",
+    
     title: "Tomamos tu usado",
     desc: "Tasación a valor real de mercado en Tucumán, sin descuentos sorpresa el día de la entrega.",
   },
@@ -28,8 +28,7 @@ export default function Standard() {
     <section className="standard">
       <div className="container">
         <div className="standard__grid">
-          <div>
-            <div className="overline standard__overline">02 — Cómo trabajamos</div>
+          <div>          
             <h2 className="standard__title">
               El estándar
               <br />

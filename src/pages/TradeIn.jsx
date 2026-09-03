@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Button from "../components/Button/Button.jsx";
 import { submitTradeIn } from "../api/tradeIn.js";
+import useVehicles from "../hooks/useVehicles.js";
 import "./TradeIn.css";
 
 const STEPS = [
@@ -21,11 +23,91 @@ const STEPS = [
   },
 ];
 
-const ESTADOS = ["Impecable", "Muy bueno", "A reparar"];
+function ShieldCheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z" />
+      <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
-const INITIAL_FORM = { modelo: "", anio: "", km: "", tel: "", estado: "Muy bueno", busca: "" };
+function ThumbsUpIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M7 11v10H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3z" />
+      <path d="M7 11l4-7a2 2 0 0 1 2 2v3h5a2 2 0 0 1 2 2.3l-1.3 6A2 2 0 0 1 17 19H9" />
+    </svg>
+  );
+}
+
+function WrenchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M14.7 6.3a3.5 3.5 0 0 0-4.6 4.6L3 18l3 3 7.1-7.1a3.5 3.5 0 0 0 4.6-4.6l-2.5 2.5-2-2 2.5-2.5z" />
+    </svg>
+  );
+}
+
+function GarageIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M4 21V9l8-5 8 5v12" />
+      <path d="M9 21v-7h6v7" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function PersonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <circle cx="12" cy="8" r="3.6" />
+      <path d="M4.5 20c.6-3.8 4-6 7.5-6s6.9 2.2 7.5 6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function NoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M6.5 6.5l11 11" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const ESTADOS = [
+  { key: "Impecable", icon: ShieldCheckIcon },
+  { key: "Muy bueno", icon: ThumbsUpIcon },
+  { key: "A reparar", icon: WrenchIcon },
+];
+
+const HISTORIALES = [
+  { key: "Oficial", desc: "Taller de la marca", icon: GarageIcon },
+  { key: "Particular", desc: "Talleres independientes", icon: PersonIcon },
+  { key: "Ninguno", desc: "Sin registros", icon: NoneIcon },
+];
+
+const NEUMATICOS = ["Gastados", "Pobres", "Regulares", "Buenos", "Nuevos"];
+
+const INITIAL_FORM = {
+  modelo: "",
+  anio: "",
+  km: "",
+  tel: "",
+  estado: "Muy bueno",
+  historial: "Oficial",
+  neumaticos: "Buenos",
+  busca: "",
+  detalles: "",
+};
 
 export default function TradeIn() {
+  const [searchParams] = useSearchParams();
+  const autoId = searchParams.get("auto");
+  const { vehicles } = useVehicles();
+  const targetVehicle = autoId ? vehicles.find((v) => v.id === autoId) : null;
+
   const [form, setForm] = useState(INITIAL_FORM);
   const [sent, setSent] = useState(false);
   const [sentModelo, setSentModelo] = useState("");
@@ -46,7 +128,12 @@ export default function TradeIn() {
         km: form.km,
         telefono: form.tel,
         estado: form.estado,
+        historial: form.historial,
+        neumaticos: form.neumaticos,
         busca: form.busca,
+        detalles: form.detalles,
+        vehiculoId: targetVehicle?.id,
+        vehiculoNombre: targetVehicle?.name,
       });
       setSentModelo(form.modelo);
       setSent(true);
@@ -65,7 +152,11 @@ export default function TradeIn() {
 
   const sentLine =
     (sentModelo ? `Ya tenemos los datos del ${sentModelo}. ` : "") +
-    "Un asesor te escribe por WhatsApp con el rango de tasación en menos de 24 horas hábiles.";
+    (targetVehicle
+      ? `Un asesor te escribe para avanzar con el ${targetVehicle.name} en menos de 24 horas hábiles.`
+      : "Un asesor te escribe por WhatsApp con el rango de tasación en menos de 24 horas hábiles.");
+
+  const neumaticoIndex = NEUMATICOS.indexOf(form.neumaticos);
 
   return (
     <main className="trade-page">
@@ -101,6 +192,14 @@ export default function TradeIn() {
             <form onSubmit={handleSubmit}>
               <h2 className="trade-page__form-title">Datos de tu vehículo</h2>
 
+              {targetVehicle && (
+                <div className="trade-page__target">
+                  <span className="mono">Vas a entregar tu usado para comprar</span>
+                  <strong>{targetVehicle.name}</strong>
+                </div>
+              )}
+
+              <div className="trade-page__section-label mono">1. Datos básicos</div>
               <div className="trade-page__fields">
                 <div className="trade-page__field">
                   <span className="mono">Marca y modelo</span>
@@ -130,28 +229,82 @@ export default function TradeIn() {
                 </div>
               </div>
 
-              <div className="trade-page__estado">
+              <div className="trade-page__section-label mono">2. Estado detallado</div>
+              <div className="trade-page__option-group">
                 <span className="mono">Estado general</span>
-                <div className="trade-page__estado-chips">
-                  {ESTADOS.map((estado) => (
+                <div className="trade-page__option-cards">
+                  {ESTADOS.map(({ key, icon: Icon }) => (
                     <button
-                      key={estado}
+                      key={key}
                       type="button"
-                      className={`trade-page__chip ${form.estado === estado ? "trade-page__chip--active" : ""}`}
-                      onClick={() => setForm((prev) => ({ ...prev, estado }))}
+                      className={`trade-page__option-card ${form.estado === key ? "trade-page__option-card--active" : ""}`}
+                      onClick={() => setForm((prev) => ({ ...prev, estado: key }))}
                     >
-                      {estado}
+                      <Icon />
+                      <span>{key}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
+              <div className="trade-page__section-label mono">3. Detalles avanzados</div>
+              <div className="trade-page__option-group">
+                <span className="mono">Historial de service</span>
+                <div className="trade-page__option-cards">
+                  {HISTORIALES.map(({ key, desc, icon: Icon }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`trade-page__option-card ${form.historial === key ? "trade-page__option-card--active" : ""}`}
+                      onClick={() => setForm((prev) => ({ ...prev, historial: key }))}
+                    >
+                      <Icon />
+                      <span>{key}</span>
+                      <small>{desc}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="trade-page__option-group">
+                <span className="mono">Condición de neumáticos</span>
+                <div className="trade-page__tires">
+                  <input
+                    type="range"
+                    min={0}
+                    max={NEUMATICOS.length - 1}
+                    step={1}
+                    value={neumaticoIndex}
+                    onChange={(e) => setForm((prev) => ({ ...prev, neumaticos: NEUMATICOS[Number(e.target.value)] }))}
+                  />
+                  <div className="trade-page__tires-labels">
+                    {NEUMATICOS.map((label, i) => (
+                      <span key={label} className={i === neumaticoIndex ? "trade-page__tires-label--active" : ""}>
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {!targetVehicle && (
+                <div className="trade-page__field trade-page__field--busca">
+                  <span className="mono">Qué buscás llevarte (opcional)</span>
+                  <input
+                    value={form.busca}
+                    onChange={updateField("busca")}
+                    placeholder="Ej. una SUV automática hasta US$32.000"
+                  />
+                </div>
+              )}
+
               <div className="trade-page__field trade-page__field--busca">
-                <span className="mono">Qué buscás llevarte (opcional)</span>
-                <input
-                  value={form.busca}
-                  onChange={updateField("busca")}
-                  placeholder="Ej. una SUV automática hasta US$32.000"
+                <span className="mono">Algún detalle más (opcional)</span>
+                <textarea
+                  value={form.detalles}
+                  onChange={updateField("detalles")}
+                  placeholder="Ej. tiene un golpe leve en la puerta trasera, service al día, dueño único..."
+                  rows={3}
                 />
               </div>
 

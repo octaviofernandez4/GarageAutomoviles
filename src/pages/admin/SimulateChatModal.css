@@ -1,0 +1,156 @@
+.sim-chat {
+  width: 100%;
+  max-width: 480px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--a-card);
+  border: 1px solid var(--a-border-3);
+  border-radius: 16px;
+  padding: 22px;
+  font-family: var(--a-font);
+  color: var(--a-text);
+}
+
+.sim-chat__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sim-chat__head-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--a-accent);
+}
+
+.sim-chat__close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--a-text-3);
+  cursor: pointer;
+}
+
+.sim-chat__close:hover {
+  background: var(--a-border-2);
+  color: var(--a-text);
+}
+
+.sim-chat__note {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--a-text-3);
+}
+
+.sim-chat__thread {
+  flex: 1;
+  min-height: 220px;
+  max-height: 46vh;
+  overflow-y: auto;
+  margin-top: 16px;
+  padding: 4px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sim-chat__empty {
+  margin: auto;
+  color: var(--a-text-4);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}
+
+.sim-chat__bubble {
+  max-width: 85%;
+  padding: 10px 13px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.sim-chat__bubble--user {
+  align-self: flex-end;
+  background: rgba(227, 169, 107, 0.16);
+  border: 1px solid rgba(227, 169, 107, 0.35);
+  color: var(--a-text);
+}
+
+.sim-chat__bubble--assistant {
+  align-self: flex-start;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border-2);
+  color: var(--a-text-2);
+}
+
+.sim-chat__bubble--typing {
+  color: var(--a-text-4);
+  font-style: italic;
+}
+
+.sim-chat__form {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.sim-chat__form input {
+  flex: 1;
+  box-sizing: border-box;
+  background: var(--a-surface-2);
+  border: 1px solid var(--a-border-3);
+  border-radius: 9px;
+  padding: 12px 13px;
+  color: var(--a-text);
+  font-family: var(--a-font);
+  font-size: 14px;
+  outline: none;
+}
+
+.sim-chat__form input:focus {
+  border-color: var(--a-accent);
+}
+
+.sim-chat__form input:disabled {
+  opacity: 0.6;
+}
+
+.sim-chat__form button {
+  flex: none;
+  width: 44px;
+  border-radius: 9px;
+  border: none;
+  background: var(--a-accent);
+  color: #101010;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.sim-chat__form button:hover:not(:disabled) {
+  background: var(--a-accent-hover);
+}
+
+.sim-chat__form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .sim-chat {
+    max-width: 100%;
+  }
+}

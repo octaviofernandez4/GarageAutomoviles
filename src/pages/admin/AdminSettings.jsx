@@ -3,9 +3,9 @@ import Button from "../../components/Button/Button.jsx";
 import { changePasswordRequest } from "../../api/auth.js";
 import { PASSWORD_RULES, validatePassword } from "../../utils/passwordPolicy.js";
 import { useAdminAuth } from "../../context/AdminAuthContext.jsx";
-import "./AdminAccount.css";
+import "./AdminSettings.css";
 
-export default function AdminAccount() {
+export default function AdminSettings() {
   const { token, admin } = useAdminAuth();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -39,14 +39,14 @@ export default function AdminAccount() {
   };
 
   return (
-    <div className="admin-account">
-      <h1 className="admin-account__title">Mi cuenta</h1>
-      <p className="admin-account__subtitle mono">{admin?.email}</p>
+    <div className="admin-settings">
+      <h1 className="admin-settings__title">Ajustes</h1>
+      <p className="admin-settings__subtitle mono">{admin?.email}</p>
 
-      <form className="admin-account__form" onSubmit={handleSubmit}>
-        <h2 className="admin-account__form-title">Cambiar contraseña</h2>
+      <form className="admin-settings__form" onSubmit={handleSubmit}>
+        <h2 className="admin-settings__form-title">Cambiar contraseña</h2>
 
-        <label className="admin-account__field">
+        <label className="admin-settings__field">
           <span className="mono">Contraseña actual</span>
           <input
             type="password"
@@ -57,7 +57,7 @@ export default function AdminAccount() {
           />
         </label>
 
-        <label className="admin-account__field">
+        <label className="admin-settings__field">
           <span className="mono">Contraseña nueva</span>
           <input
             type="password"
@@ -68,24 +68,24 @@ export default function AdminAccount() {
           />
         </label>
 
-        <ul className="admin-account__rules">
+        <ul className="admin-settings__rules">
           {PASSWORD_RULES.map((rule) => {
             const met = rule.test(newPassword);
             return (
-              <li key={rule.key} className={met ? "admin-account__rule--met" : ""}>
+              <li key={rule.key} className={met ? "admin-settings__rule--met" : ""}>
                 <span aria-hidden="true">{met ? "✓" : "○"}</span> {rule.label}
               </li>
             );
           })}
         </ul>
 
-        {error && <p className="admin-account__error">{error}</p>}
-        {success && <p className="admin-account__success">Contraseña actualizada.</p>}
+        {error && <p className="admin-settings__error">{error}</p>}
+        {success && <p className="admin-settings__success">Contraseña actualizada.</p>}
 
         <Button
           type="submit"
           variant="copper"
-          className="admin-account__submit"
+          className="admin-settings__submit"
           disabled={submitting || !newPassword || !currentPassword}
         >
           {submitting ? "Guardando..." : "Cambiar contraseña"}

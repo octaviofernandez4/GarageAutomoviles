@@ -16,8 +16,7 @@ export default function VisitUs() {
   return (
     <section id="visit" className="section visit">
       <div className="container visit__grid">
-        <div>
-          <div className="overline">04 — Visitanos</div>
+        <div>        
           <h2 className="visit__title">
             Av. Aconquija 1763
             <br />

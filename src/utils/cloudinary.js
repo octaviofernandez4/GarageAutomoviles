@@ -25,3 +25,9 @@ export async function uploadImageToCloudinary(file) {
 
   return data.secure_url;
 }
+
+export function optimizedImage(url, width) {
+  if (!url || !url.includes("res.cloudinary.com") || !url.includes("/upload/")) return url;
+  const transform = width ? `f_auto,q_auto,w_${width}` : "f_auto,q_auto";
+  return url.replace("/upload/", `/upload/${transform}/`);
+}

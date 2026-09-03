@@ -1,0 +1,104 @@
+.admin-settings__title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.admin-settings__subtitle {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--a-text-3);
+}
+
+.admin-settings__form {
+  margin-top: 28px;
+  max-width: 400px;
+  background: var(--a-card);
+  border: 1px solid var(--a-border-1);
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.admin-settings__form-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.admin-settings__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.admin-settings__field > .mono {
+  font-family: var(--a-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--a-text-2);
+}
+
+.admin-settings__field input {
+  box-sizing: border-box;
+  padding: 12px 13px;
+  background: var(--a-surface-2);
+  border: 1px solid var(--a-border-3);
+  border-radius: 9px;
+  color: var(--a-text);
+  font-family: var(--a-font);
+  font-size: 14px;
+  outline: none;
+}
+
+.admin-settings__field input:focus {
+  border-color: var(--a-accent);
+}
+
+.admin-settings__rules {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+}
+
+.admin-settings__rules li {
+  font-size: 12.5px;
+  color: var(--a-text-4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-settings__rule--met {
+  color: var(--a-success);
+}
+
+.admin-settings__error {
+  margin-top: 14px;
+  color: var(--a-danger);
+  font-size: 13px;
+}
+
+.admin-settings__success {
+  margin-top: 14px;
+  color: var(--a-success);
+  font-size: 13px;
+}
+
+.admin-settings__submit {
+  width: 100%;
+  margin-top: 20px;
+  padding: 13px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .admin-settings__form {
+    max-width: 100%;
+    padding: 20px;
+  }
+}

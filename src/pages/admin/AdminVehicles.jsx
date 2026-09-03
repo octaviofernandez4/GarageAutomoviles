@@ -1,7 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import { fetchAdminVehicles, deleteVehicle, setVehicleStatus } from "../../api/vehiclesAdmin.js";
 import { useAdminAuth } from "../../context/AdminAuthContext.jsx";
+import { optimizedImage } from "../../utils/cloudinary.js";
+import {
+  CameraIcon,
+  EyeIcon,
+  EyeOffIcon,
+  MoreIcon,
+  PencilIcon,
+  PlusIcon,
+  SearchIcon,
+  SlidersIcon,
+} from "../../components/admin/icons.jsx";
 import "./AdminVehicles.css";
 
 const STATUS_LABEL = { publicado: "Publicado", borrador: "Borrador", vendido: "Vendido" };
@@ -32,7 +43,9 @@ export default function AdminVehicles() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [sort, setSort] = useState("priceDesc");
   const [confirming, setConfirming] = useState(null);
+  const [confirmingHide, setConfirmingHide] = useState(null);
   const [busyId, setBusyId] = useState(null);
+  const [menuOpenId, setMenuOpenId] = useState(null);
 
   const load = () => {
     setStatus("loading");
@@ -45,6 +58,14 @@ export default function AdminVehicles() {
   };
 
   useEffect(load, []);
+
+  useEffect(() => {
+    function onDocClick(e) {
+      if (!e.target.closest(".admin-vehicles__menu")) setMenuOpenId(null);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
 
   const counts = useMemo(
     () => ({
@@ -68,6 +89,13 @@ export default function AdminVehicles() {
     return [...list].sort(SORTERS[sort]);
   }, [vehicles, statusFilter, query, sort]);
 
+  const activeFiltersCount = (statusFilter !== "all" ? 1 : 0) + (query.trim() ? 1 : 0);
+
+  const handleResetFilters = () => {
+    setStatusFilter("all");
+    setQuery("");
+  };
+
   const handleToggleStatus = async (vehicle) => {
     const target = vehicle.status === "publicado" ? "borrador" : "publicado";
     setBusyId(vehicle.id);
@@ -80,6 +108,20 @@ export default function AdminVehicles() {
     } finally {
       setBusyId(null);
     }
+  };
+
+  const handleActionClick = (vehicle) => {
+    if (vehicle.status === "publicado") {
+      setConfirmingHide(vehicle);
+    } else {
+      handleToggleStatus(vehicle);
+    }
+  };
+
+  const handleConfirmHide = async () => {
+    if (!confirmingHide) return;
+    await handleToggleStatus(confirmingHide);
+    setConfirmingHide(null);
   };
 
   const handleDelete = async () => {
@@ -101,46 +143,88 @@ export default function AdminVehicles() {
     <div className="admin-vehicles">
       <div className="admin-vehicles__head">
         <div>
-          <h1 className="admin-vehicles__title">Vehículos</h1>
-          <p className="admin-vehicles__summary mono">
-            {counts.publicado} publicados · {counts.borrador} en borrador · {counts.vendido} vendidos
-          </p>
+          <div className="admin-vehicles__title-row">
+            <h1 className="admin-vehicles__title">Vehículos</h1>
+            <span className="admin-vehicles__total-badge">{vehicles.length} Total</span>
+          </div>
+          <p className="admin-vehicles__subtitle">Control de stock y catálogo online</p>
         </div>
         <Link to="/admin/vehiculos/nuevo" className="admin-vehicles__new">
-          + Nuevo vehículo
+          + Nuevo
         </Link>
+      </div>
+
+      <div className="admin-vehicles__stats">
+        <div className="admin-vehicles__stat">
+          <div className="admin-vehicles__stat-head">
+            <span className="admin-vehicles__stat-dot admin-vehicles__stat-dot--publicado" />
+            <span className="admin-vehicles__stat-label mono">Publicados</span>
+          </div>
+          <span className="admin-vehicles__stat-value">{counts.publicado}</span>
+        </div>
+        <div className="admin-vehicles__stat">
+          <div className="admin-vehicles__stat-head">
+            <span className="admin-vehicles__stat-dot admin-vehicles__stat-dot--borrador" />
+            <span className="admin-vehicles__stat-label mono">Borradores</span>
+          </div>
+          <span className="admin-vehicles__stat-value">{counts.borrador}</span>
+        </div>
+        <div className="admin-vehicles__stat">
+          <div className="admin-vehicles__stat-head">
+            <span className="admin-vehicles__stat-dot admin-vehicles__stat-dot--vendido" />
+            <span className="admin-vehicles__stat-label mono">Vendidos</span>
+          </div>
+          <span className="admin-vehicles__stat-value">{counts.vendido}</span>
+        </div>
       </div>
 
       <div className="admin-vehicles__toolbar">
         <div className="admin-vehicles__search">
-          <span className="admin-vehicles__search-icon" aria-hidden="true" />
+          <SearchIcon className="admin-vehicles__search-icon" />
           <input
             type="search"
-            placeholder="Buscar por nombre, marca o carrocería…"
+            placeholder="Buscar marca, modelo, año…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
 
-        <div className="admin-vehicles__chips">
-          {STATUS_FILTERS.map((f) => (
-            <button
-              key={f.key}
-              type="button"
-              className={`admin-vehicles__chip ${statusFilter === f.key ? "admin-vehicles__chip--active" : ""}`}
-              onClick={() => setStatusFilter(f.key)}
-            >
-              {f.label} ({counts[f.key]})
-            </button>
-          ))}
-        </div>
+        <button
+          type="button"
+          className="admin-vehicles__filter-btn"
+          onClick={handleResetFilters}
+          disabled={activeFiltersCount === 0}
+          title={activeFiltersCount > 0 ? "Limpiar filtros" : "Sin filtros activos"}
+        >
+          <SlidersIcon />
+          {activeFiltersCount > 0 && <span className="admin-vehicles__filter-badge">{activeFiltersCount}</span>}
+        </button>
+      </div>
 
-        <select className="admin-vehicles__sort" value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="priceDesc">Precio: mayor a menor</option>
-          <option value="priceAsc">Precio: menor a mayor</option>
-          <option value="yearDesc">Año más nuevo</option>
-          <option value="nameAsc">Nombre A–Z</option>
-        </select>
+      <div className="admin-vehicles__chips">
+        {STATUS_FILTERS.map((f) => (
+          <button
+            key={f.key}
+            type="button"
+            className={`admin-vehicles__chip ${statusFilter === f.key ? "admin-vehicles__chip--active" : ""}`}
+            onClick={() => setStatusFilter(f.key)}
+          >
+            {f.label} ({counts[f.key]})
+          </button>
+        ))}
+      </div>
+
+      <div className="admin-vehicles__sort-row">
+        <label className="admin-vehicles__sort-label">
+          <span className="mono">Orden:</span>
+          <select className="admin-vehicles__sort" value={sort} onChange={(e) => setSort(e.target.value)}>
+            <option value="priceDesc">Precio: mayor a menor</option>
+            <option value="priceAsc">Precio: menor a mayor</option>
+            <option value="yearDesc">Año más nuevo</option>
+            <option value="nameAsc">Nombre A–Z</option>
+          </select>
+        </label>
+        <span className="admin-vehicles__showing mono">Mostrando {filtered.length}</span>
       </div>
 
       {status === "loading" && <p className="admin-vehicles__state">Cargando...</p>}
@@ -149,63 +233,91 @@ export default function AdminVehicles() {
       )}
 
       {status === "success" && (
-        <div className="admin-vehicles__table">
-          <div className="admin-vehicles__row admin-vehicles__row--head mono">
-            <span>Foto</span>
-            <span>Vehículo</span>
-            <span className="admin-vehicles__col-price">Precio</span>
-            <span className="admin-vehicles__col-status">Estado</span>
-            <span className="admin-vehicles__col-actions">Acciones</span>
-          </div>
-
+        <div className="admin-vehicles__cards">
           {filtered.map((vehicle) => (
-            <div key={vehicle.id} className="admin-vehicles__row">
-              <div className="admin-vehicles__thumb">
+            <div key={vehicle.id} className="admin-vehicles__vcard">
+              <div className="admin-vehicles__vcard-thumb">
                 {vehicle.images?.[0] ? (
-                  <img src={vehicle.images[0]} alt="" />
+                  <img src={optimizedImage(vehicle.images[0], 200)} alt="" />
                 ) : (
-                  <span className="mono">{vehicle.images?.length || 0} fotos</span>
+                  <span className="mono">Sin foto</span>
                 )}
+                {vehicle.images?.length > 0 && (
+                  <span className="admin-vehicles__vcard-photos">
+                    <CameraIcon />
+                    {vehicle.images.length}
+                  </span>
+                )}
+                {vehicle.featured && <span className="admin-vehicles__vcard-featured">Destacado</span>}
               </div>
 
-              <div className="admin-vehicles__info">
-                <div className="admin-vehicles__name">{vehicle.name}</div>
-                <div className="admin-vehicles__meta mono">
-                  {vehicle.brand} · {vehicle.body} · {vehicle.year}
+              <div className="admin-vehicles__vcard-body">
+                <div className="admin-vehicles__vcard-head">
+                  <span className="admin-vehicles__vcard-name">{vehicle.name}</span>
+                  <span className={`admin-vehicles__pill admin-vehicles__pill--${vehicle.status}`}>
+                    <span className="admin-vehicles__pill-dot" aria-hidden="true" />
+                    {STATUS_LABEL[vehicle.status]}
+                  </span>
                 </div>
-              </div>
 
-              <div className="admin-vehicles__col-price admin-vehicles__price">
-                {formatMoney(vehicle.price)}
-              </div>
+                <div className="admin-vehicles__vcard-meta mono">
+                  {vehicle.brand} · {vehicle.body} · {vehicle.year} · {vehicle.km ? `${vehicle.km.toLocaleString("es-AR")} km` : "s/d"}
+                </div>
 
-              <div className="admin-vehicles__col-status">
-                <span className={`admin-vehicles__pill admin-vehicles__pill--${vehicle.status}`}>
-                  <span className="admin-vehicles__pill-dot" aria-hidden="true" />
-                  {STATUS_LABEL[vehicle.status]}
-                </span>
-              </div>
+                <div className="admin-vehicles__vcard-price">
+                  <span className="mono">Precio venta</span>
+                  <strong>{formatMoney(vehicle.price)}</strong>
+                </div>
 
-              <div className="admin-vehicles__col-actions admin-vehicles__actions">
-                <button
-                  type="button"
-                  className="admin-vehicles__action"
-                  disabled={busyId === vehicle.id}
-                  onClick={() => handleToggleStatus(vehicle)}
-                >
-                  {vehicle.status === "publicado" ? "Ocultar" : "Publicar"}
-                </button>
-                <Link to={`/admin/vehiculos/${vehicle.id}/editar`} className="admin-vehicles__action admin-vehicles__action--edit">
-                  Editar
-                </Link>
-                <button
-                  type="button"
-                  className="admin-vehicles__action admin-vehicles__action--delete"
-                  disabled={busyId === vehicle.id}
-                  onClick={() => setConfirming(vehicle)}
-                >
-                  Borrar
-                </button>
+                <div className="admin-vehicles__vcard-actions">
+                  <Link to={`/admin/vehiculos/${vehicle.id}/editar`} className="admin-vehicles__vcard-btn">
+                    <PencilIcon />
+                    Editar ficha
+                  </Link>
+                  <button
+                    type="button"
+                    className="admin-vehicles__vcard-btn"
+                    disabled={busyId === vehicle.id}
+                    onClick={() => handleActionClick(vehicle)}
+                  >
+                    {vehicle.status === "publicado" ? (
+                      <>
+                        <EyeOffIcon />
+                        Ocultar
+                      </>
+                    ) : (
+                      <>
+                        <EyeIcon />
+                        Publicar
+                      </>
+                    )}
+                  </button>
+
+                  <div className="admin-vehicles__menu">
+                    <button
+                      type="button"
+                      className="admin-vehicles__vcard-more"
+                      onClick={() => setMenuOpenId(menuOpenId === vehicle.id ? null : vehicle.id)}
+                      aria-label="Más opciones"
+                    >
+                      <MoreIcon />
+                    </button>
+                    {menuOpenId === vehicle.id && (
+                      <div className="admin-vehicles__menu-panel">
+                        <button
+                          type="button"
+                          className="admin-vehicles__menu-delete"
+                          onClick={() => {
+                            setMenuOpenId(null);
+                            setConfirming(vehicle);
+                          }}
+                        >
+                          Borrar vehículo
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -218,6 +330,10 @@ export default function AdminVehicles() {
           )}
         </div>
       )}
+
+      <Link to="/admin/vehiculos/nuevo" className="admin-vehicles__fab" aria-label="Nuevo vehículo">
+        <PlusIcon />
+      </Link>
 
       {confirming && (
         <div className="admin-modal-overlay" onClick={() => setConfirming(null)}>
@@ -233,6 +349,31 @@ export default function AdminVehicles() {
               </button>
               <button type="button" className="admin-modal__confirm" onClick={handleDelete}>
                 Sí, borrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmingHide && (
+        <div className="admin-modal-overlay" onClick={() => setConfirmingHide(null)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <h2 className="admin-modal__title">¿Ocultar este vehículo?</h2>
+            <p className="admin-modal__text">
+              {confirmingHide.name} va a pasar a borrador y va a dejar de verse en la web hasta que lo
+              vuelvas a publicar.
+            </p>
+            <div className="admin-modal__actions">
+              <button type="button" className="admin-modal__cancel" onClick={() => setConfirmingHide(null)}>
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="admin-modal__confirm admin-modal__confirm--accent"
+                onClick={handleConfirmHide}
+                disabled={busyId === confirmingHide.id}
+              >
+                Sí, ocultar
               </button>
             </div>
           </div>

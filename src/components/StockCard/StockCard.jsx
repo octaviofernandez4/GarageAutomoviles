@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { optimizedImage } from "../../utils/cloudinary.js";
 import "./StockCard.css";
 
 export default function StockCard({ vehicle }) {
@@ -7,7 +8,7 @@ export default function StockCard({ vehicle }) {
   return (
     <Link to={`/stock/${id}`} className="stock-card">
       <div className="stock-card__photo">
-        <img src={image} alt={name} loading="lazy" />
+        <img src={optimizedImage(image, 600)} alt={name} loading="lazy" />
       </div>
       <div className="stock-card__body">
         <div className="stock-card__badge mono">{badge}</div>

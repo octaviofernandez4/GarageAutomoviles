@@ -6,8 +6,8 @@ const WHATSAPP_URL = "https://wa.me/5493810000000";
 
 const STATS = [
   { value: "7.000+", label: "clientes" },
-  { value: "760+", label: "autos vendidos" },
-  { value: "12 años", label: "en Tucumán" },
+  { value: "1000+", label: "autos vendidos" },
+  { value: "25 años", label: "en Tucumán" },
 ];
 
 export default function Hero({ total }) {

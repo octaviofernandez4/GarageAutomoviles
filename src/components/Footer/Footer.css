@@ -1,19 +1,18 @@
 .footer {
-  border-top: 1px solid var(--line);
-  background: var(--ink);
+  margin-top: px;
+padding:60px;
 }
-
 .footer__grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr 1fr;
   gap: 40px;
-  padding: 56px 32px 32px;
+  padding: 40px 0 32px;
 }
 
 .footer__logo {
-  height: 58px;
-  width: auto;
-  mix-blend-mode: screen;
+  height: 188px;
+  border-radius: 85%;
+  
 }
 
 .footer__tagline {
@@ -67,7 +66,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 24px 32px 40px;
+  padding: 24px 0 40px;
   border-top: 1px solid var(--line);
 }
 

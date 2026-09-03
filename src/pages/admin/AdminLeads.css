@@ -1,0 +1,227 @@
+.admin-leads {
+  max-width: 860px;
+}
+
+.admin-leads__head {
+  margin-bottom: 20px;
+}
+
+.admin-leads__title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.admin-leads__summary {
+  margin-top: 6px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--a-text-3);
+  text-transform: uppercase;
+}
+
+.admin-leads__toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.admin-leads__search {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.admin-leads__chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border-2);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.admin-leads__chip {
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--a-text-2);
+  font-family: var(--a-font);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-leads__chip--active {
+  background: var(--a-accent);
+  color: #101010;
+}
+
+.admin-leads__search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--a-text-4);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.admin-leads__search input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border-2);
+  border-radius: 10px;
+  padding: 12px 14px 12px 38px;
+  color: var(--a-text);
+  font-family: var(--a-font);
+  font-size: 14px;
+}
+
+.admin-leads__search input::placeholder {
+  color: var(--a-text-4);
+}
+
+.admin-leads__search input:focus {
+  outline: none;
+  border-color: var(--a-accent);
+}
+
+.admin-leads__state {
+  color: var(--a-text-3);
+  padding: 32px 0;
+}
+
+.admin-leads__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-leads__card {
+  background: var(--a-surface);
+  border: 1px solid var(--a-border-2);
+  border-radius: 10px;
+  padding: 18px;
+  transition: border-color 0.4s ease, background-color 0.4s ease;
+}
+
+.admin-leads__card--highlight {
+  border-color: var(--a-accent);
+  background: rgba(227, 169, 107, 0.08);
+  animation: admin-leads-pulse 1.2s ease 2;
+}
+
+@keyframes admin-leads-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(227, 169, 107, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(227, 169, 107, 0.18);
+  }
+}
+
+.admin-leads__card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-leads__card-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.admin-leads__card-meta {
+  margin-top: 4px;
+  font-family: var(--a-font);
+  font-size: 12px;
+  color: var(--a-text-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-leads__whatsapp {
+  flex: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--a-border-3);
+  color: var(--a-text);
+  font-family: var(--a-font);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-leads__whatsapp:hover {
+  border-color: var(--a-success);
+  color: var(--a-success);
+}
+
+.admin-leads__target {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: rgba(227, 169, 107, 0.12);
+  border: 1px solid rgba(227, 169, 107, 0.3);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.admin-leads__target .mono {
+  font-size: 9.5px;
+  color: var(--a-accent);
+  margin-right: 4px;
+}
+
+.admin-leads__grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 16px;
+  font-size: 13.5px;
+}
+
+.admin-leads__grid .mono {
+  font-size: 9.5px;
+  color: var(--a-text-4);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.admin-leads__details {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--a-border-2);
+  font-size: 13.5px;
+}
+
+.admin-leads__details .mono {
+  font-size: 9.5px;
+  color: var(--a-text-4);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.admin-leads__details p {
+  color: var(--a-text-2);
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .admin-leads__card-head {
+    flex-direction: column;
+  }
+
+  .admin-leads__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

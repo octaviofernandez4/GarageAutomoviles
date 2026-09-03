@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { fetchAdminVehicles, createVehicle, updateVehicle } from "../../api/vehiclesAdmin.js";
-import { uploadImageToCloudinary } from "../../utils/cloudinary.js";
+import { uploadImageToCloudinary, optimizedImage } from "../../utils/cloudinary.js";
 import { slugify } from "../../utils/slugify.js";
 import { useAdminAuth } from "../../context/AdminAuthContext.jsx";
 import "./AdminVehicleForm.css";
@@ -11,6 +11,7 @@ const BODIES = ["SUV", "Sedán", "Hatchback", "Pick-up", "Coupé", "Familiar"];
 const GEARBOXES = ["Automática", "Manual", "CVT"];
 const FUELS = ["Nafta", "Diésel", "Híbrido", "Eléctrico"];
 const TRACTIONS = ["4x2", "4x4", "AWD"];
+const MAX_PHOTOS = 7;
 
 const STATUSES = [
   { key: "publicado", label: "Publicado", desc: "Visible en la web" },
@@ -69,6 +70,8 @@ export default function AdminVehicleForm({ mode }) {
   const [loading, setLoading] = useState(mode === "edit");
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [confirmingSave, setConfirmingSave] = useState(false);
+  const [confirmingRemoveCheck, setConfirmingRemoveCheck] = useState(null);
 
   useEffect(() => {
     if (mode !== "edit") return;
@@ -78,7 +81,7 @@ export default function AdminVehicleForm({ mode }) {
         const vehicle = list.find((v) => v.id === id);
         if (!vehicle) {
           showToast("No encontramos ese vehículo.");
-          navigate("/admin");
+          navigate("/admin/vehiculos");
           return;
         }
         setForm({
@@ -118,10 +121,21 @@ export default function AdminVehicleForm({ mode }) {
     e.target.value = "";
     if (files.length === 0) return;
 
+    const remaining = MAX_PHOTOS - images.length;
+    if (remaining <= 0) {
+      showToast(`Ya tenés el máximo de ${MAX_PHOTOS} fotos por vehículo.`);
+      return;
+    }
+
+    const toUpload = files.slice(0, remaining);
+    if (files.length > toUpload.length) {
+      showToast(`Máximo ${MAX_PHOTOS} fotos por vehículo. Se subieron ${toUpload.length}.`);
+    }
+
     setUploading(true);
     try {
       const uploaded = [];
-      for (const file of files) {
+      for (const file of toUpload) {
         uploaded.push(await uploadImageToCloudinary(file));
       }
       setImages((prev) => [...prev, ...uploaded]);
@@ -158,6 +172,12 @@ export default function AdminVehicleForm({ mode }) {
     setChecks((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const confirmRemoveCheck = () => {
+    if (confirmingRemoveCheck === null) return;
+    removeCheck(confirmingRemoveCheck);
+    setConfirmingRemoveCheck(null);
+  };
+
   const canSave = Boolean(form.name.trim()) && Boolean(form.price);
 
   const helperText = !canSave
@@ -166,7 +186,7 @@ export default function AdminVehicleForm({ mode }) {
       ? "Se va a ver en la web al guardar."
       : "Queda guardado sin publicarse.";
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!canSave) {
@@ -174,6 +194,15 @@ export default function AdminVehicleForm({ mode }) {
       return;
     }
 
+    if (mode === "edit") {
+      setConfirmingSave(true);
+      return;
+    }
+
+    saveVehicle();
+  };
+
+  const saveVehicle = async () => {
     const payload = {
       id: slug,
       name: form.name.trim(),
@@ -203,11 +232,12 @@ export default function AdminVehicleForm({ mode }) {
         await updateVehicle(token, id, payload);
         showToast("Cambios guardados");
       }
-      navigate("/admin");
+      navigate("/admin/vehiculos");
     } catch (err) {
       showToast(err.message);
     } finally {
       setSubmitting(false);
+      setConfirmingSave(false);
     }
   };
 
@@ -224,7 +254,7 @@ export default function AdminVehicleForm({ mode }) {
 
   return (
     <div className="admin-vehicle-form">
-      <button type="button" className="admin-vehicle-form__back" onClick={() => navigate("/admin")}>
+      <button type="button" className="admin-vehicle-form__back" onClick={() => navigate("/admin/vehiculos")}>
         ← Volver al stock
       </button>
 
@@ -300,12 +330,13 @@ export default function AdminVehicleForm({ mode }) {
                 <span className="admin-vehicle-form__card-num">02</span>
                 <h2 className="admin-vehicle-form__card-title">Fotos</h2>
                 <span className="admin-vehicle-form__card-tag">
-                  {images.length > 0 ? `${images.length} fotos` : "Sin fotos todavía"}
+                  {images.length > 0 ? `${images.length}/${MAX_PHOTOS} fotos` : `Sin fotos todavía (máx. ${MAX_PHOTOS})`}
                 </span>
               </div>
 
               <p className="admin-vehicle-form__note">
-                La primera foto es la portada. Arrastrá para reordenar o marcá otra como portada.
+                La primera foto es la portada. Arrastrá para reordenar o marcá otra como portada. Hasta{" "}
+                {MAX_PHOTOS} fotos por vehículo.
               </p>
 
               <div className="admin-vehicle-form__photos">
@@ -314,7 +345,7 @@ export default function AdminVehicleForm({ mode }) {
                     key={src + i}
                     className={`admin-vehicle-form__photo ${i === 0 ? "admin-vehicle-form__photo--cover" : ""}`}
                   >
-                    <img src={src} alt="" />
+                    <img src={optimizedImage(src, 300)} alt="" />
                     <span className="admin-vehicle-form__photo-index mono">{String(i + 1).padStart(2, "0")}</span>
                     {i === 0 && <span className="admin-vehicle-form__photo-badge">Portada</span>}
                     <div className="admin-vehicle-form__photo-actions">
@@ -330,13 +361,15 @@ export default function AdminVehicleForm({ mode }) {
                   </div>
                 ))}
 
-                <label className="admin-vehicle-form__upload">
-                  <span className="admin-vehicle-form__upload-plus" aria-hidden="true">
-                    +
-                  </span>
-                  {uploading ? "Subiendo..." : "Agregar fotos"}
-                  <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={uploading} />
-                </label>
+                {images.length < MAX_PHOTOS && (
+                  <label className="admin-vehicle-form__upload">
+                    <span className="admin-vehicle-form__upload-plus" aria-hidden="true">
+                      +
+                    </span>
+                    {uploading ? "Subiendo..." : "Agregar fotos"}
+                    <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={uploading} />
+                  </label>
+                )}
               </div>
             </section>
 
@@ -437,7 +470,7 @@ export default function AdminVehicleForm({ mode }) {
                     <button
                       type="button"
                       className="admin-vehicle-form__check-remove"
-                      onClick={() => removeCheck(i)}
+                      onClick={() => setConfirmingRemoveCheck(i)}
                       aria-label="Borrar ítem"
                     >
                       ✕
@@ -457,7 +490,7 @@ export default function AdminVehicleForm({ mode }) {
               <span className="admin-vehicle-form__side-label mono">Así se ve en la web</span>
               <div className="admin-vehicle-form__preview">
                 <div className="admin-vehicle-form__preview-photo">
-                  {images[0] ? <img src={images[0]} alt="" /> : <span className="mono">Sin foto</span>}
+                  {images[0] ? <img src={optimizedImage(images[0], 400)} alt="" /> : <span className="mono">Sin foto</span>}
                 </div>
                 <div className="admin-vehicle-form__preview-body">
                   <div className="admin-vehicle-form__preview-name">{previewName}</div>
@@ -503,13 +536,59 @@ export default function AdminVehicleForm({ mode }) {
             <button type="submit" className="admin-vehicle-form__save" disabled={submitting || uploading}>
               {submitting ? "Guardando..." : "Guardar vehículo"}
             </button>
-            <button type="button" className="admin-vehicle-form__cancel" onClick={() => navigate("/admin")}>
+            <button type="button" className="admin-vehicle-form__cancel" onClick={() => navigate("/admin/vehiculos")}>
               Cancelar
             </button>
             <p className="admin-vehicle-form__helper">{helperText}</p>
           </aside>
         </div>
       </form>
+
+      {confirmingSave && (
+        <div className="admin-modal-overlay" onClick={() => setConfirmingSave(false)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <h2 className="admin-modal__title">¿Guardar los cambios?</h2>
+            <p className="admin-modal__text">
+              Se van a actualizar los datos de {form.name || "este vehículo"}
+              {form.status === "publicado" ? " y va a quedar visible en la web." : "."}
+            </p>
+            <div className="admin-modal__actions">
+              <button type="button" className="admin-modal__cancel" onClick={() => setConfirmingSave(false)}>
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="admin-modal__confirm admin-modal__confirm--accent"
+                onClick={saveVehicle}
+                disabled={submitting}
+              >
+                {submitting ? "Guardando..." : "Sí, guardar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmingRemoveCheck !== null && (
+        <div className="admin-modal-overlay" onClick={() => setConfirmingRemoveCheck(null)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <h2 className="admin-modal__title">¿Borrar este ítem?</h2>
+            <p className="admin-modal__text">
+              {checks[confirmingRemoveCheck]?.title
+                ? `"${checks[confirmingRemoveCheck].title}" se va a sacar del informe de la unidad.`
+                : "Este ítem del informe de la unidad se va a sacar."}
+            </p>
+            <div className="admin-modal__actions">
+              <button type="button" className="admin-modal__cancel" onClick={() => setConfirmingRemoveCheck(null)}>
+                Cancelar
+              </button>
+              <button type="button" className="admin-modal__confirm" onClick={confirmRemoveCheck}>
+                Sí, borrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

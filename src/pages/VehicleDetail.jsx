@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button.jsx";
 import useVehicles from "../hooks/useVehicles.js";
 import { decorateVehicle, formatMoney } from "../utils/format.js";
+import { optimizedImage } from "../utils/cloudinary.js";
 import "./VehicleDetail.css";
 
 const WHATSAPP_NUMBER = "5493810000000";
@@ -41,6 +42,11 @@ export default function VehicleDetail() {
   }
 
   const current = decorateVehicle(found);
+
+  const goToImage = (delta) => {
+    const total = current.images.length;
+    setActiveImage((prev) => (prev + delta + total) % total);
+  };
   const cuota = Math.round((current.price * 0.5) / 24 / 100) * 100;
   const financeLine = `Anticipo ${formatMoney(Math.round(current.price * 0.5))} + 24 cuotas de ${formatMoney(cuota)}`;
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -69,7 +75,30 @@ export default function VehicleDetail() {
       <div className="container detail-page__grid">
         <div>
           <div className="detail-page__photo">
-            <img src={current.images[activeImage] ?? current.image} alt={current.name} />
+            <img src={optimizedImage(current.images[activeImage] ?? current.image, 1400)} alt={current.name} />
+            {current.images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="detail-page__nav detail-page__nav--prev"
+                  onClick={() => goToImage(-1)}
+                  aria-label="Foto anterior"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="detail-page__nav detail-page__nav--next"
+                  onClick={() => goToImage(1)}
+                  aria-label="Foto siguiente"
+                >
+                  ›
+                </button>
+                <span className="detail-page__counter mono">
+                  {activeImage + 1} / {current.images.length}
+                </span>
+              </>
+            )}
           </div>
 
           {current.images.length > 1 && (
@@ -84,7 +113,7 @@ export default function VehicleDetail() {
                   onClick={() => setActiveImage(i)}
                   aria-label={`Ver foto ${i + 1} de ${current.name}`}
                 >
-                  <img src={src} alt="" loading="lazy" />
+                  <img src={optimizedImage(src, 160)} alt="" loading="lazy" />
                 </button>
               ))}
             </div>
@@ -141,7 +170,7 @@ export default function VehicleDetail() {
               <Button as="a" href={waLink} target="_blank" rel="noreferrer" variant="copper" className="detail-page__action">
                 Consultar por WhatsApp
               </Button>
-              <Button to="/tasar" variant="outline" className="detail-page__action">
+              <Button to={`/tasar?auto=${encodeURIComponent(current.id)}`} variant="outline" className="detail-page__action">
                 Entregar mi usado en parte de pago
               </Button>
             </div>

@@ -117,6 +117,26 @@
   height: 15px;
 }
 
+.stock-filters__search {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 26px;
+  padding: 14px;
+  background: var(--copper);
+  border: none;
+  color: #101010;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.stock-filters__search:hover {
+  background: var(--copper-lit);
+}
+
 @media (max-width: 900px) {
   .stock-filters {
     position: fixed;
@@ -141,5 +161,13 @@
     font-size: 24px;
     line-height: 1;
     cursor: pointer;
+  }
+
+  .stock-filters__search {
+    position: sticky;
+    bottom: -32px;
+    margin: 28px -20px -32px;
+    width: calc(100% + 40px);
+    padding: 18px 20px;
   }
 }

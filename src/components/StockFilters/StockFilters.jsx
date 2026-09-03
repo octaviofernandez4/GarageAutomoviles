@@ -85,6 +85,10 @@ export default function StockFilters({
           Solo caja automática
         </label>
       </div>
+
+      <button type="button" className="stock-filters__search" onClick={onCloseDrawer}>
+        Buscar
+      </button>
     </aside>
   );
 }
