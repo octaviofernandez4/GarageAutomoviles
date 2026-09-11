@@ -107,11 +107,16 @@ export default function AdminVehicleForm({ mode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, id]);
 
-  const slug = mode === "create" ? slugify(form.name) || "nombre-del-auto" : id;
+  const slug = mode === "create" ? slugify(form.name) || `vehiculo-${Date.now()}` : id;
 
   const updateField = (field) => (e) => {
     const { value } = e.target;
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const updateNumericField = (field) => (e) => {
+    const digits = e.target.value.replace(/[^0-9]/g, "");
+    setForm((prev) => ({ ...prev, [field]: digits }));
   };
 
   const handleFiles = async (e) => {
@@ -311,10 +316,11 @@ export default function AdminVehicleForm({ mode }) {
                   <div className="admin-vehicle-form__price-wrap">
                     <span className="admin-vehicle-form__price-prefix">US$</span>
                     <input
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       value={form.price}
-                      onChange={updateField("price")}
-                      placeholder="42.500"
+                      onChange={updateNumericField("price")}
+                      placeholder="42500"
                       className="admin-vehicle-form__price-input"
                     />
                   </div>
@@ -382,7 +388,13 @@ export default function AdminVehicleForm({ mode }) {
               <div className="admin-vehicle-form__grid-3">
                 <label className="admin-vehicle-form__field">
                   <span className="mono">Kilómetros</span>
-                  <input type="number" value={form.km} onChange={updateField("km")} placeholder="35.000" />
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={form.km}
+                    onChange={updateNumericField("km")}
+                    placeholder="35000"
+                  />
                 </label>
 
                 <label className="admin-vehicle-form__field">
