@@ -11,11 +11,16 @@ export function formatMoney(value) {
 }
 
 export function formatKm(value) {
+  if (value == null || Number.isNaN(Number(value))) return "s/d";
   return `${numberFormatter.format(value)} km`;
 }
 
 export function formatNumber(value) {
   return numberFormatter.format(value);
+}
+
+export function formatSpec(value) {
+  return value || "s/d";
 }
 
 export function decorateVehicle(vehicle) {
@@ -27,6 +32,6 @@ export function decorateVehicle(vehicle) {
     image: images[0],
     priceFmt: formatMoney(vehicle.price),
     kmFmt: formatKm(vehicle.km),
-    summary: `${vehicle.year} · ${formatKm(vehicle.km)} · ${vehicle.engine} · ${vehicle.gearbox}`,
+    summary: `${vehicle.year} · ${formatKm(vehicle.km)} · ${formatSpec(vehicle.engine)} · ${formatSpec(vehicle.gearbox)}`,
   };
 }

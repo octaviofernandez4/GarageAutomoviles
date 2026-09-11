@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button.jsx";
 import useVehicles from "../hooks/useVehicles.js";
-import { decorateVehicle, formatMoney } from "../utils/format.js";
+import { decorateVehicle, formatMoney, formatSpec } from "../utils/format.js";
 import { optimizedImage } from "../utils/cloudinary.js";
 import "./VehicleDetail.css";
 
@@ -54,13 +54,13 @@ export default function VehicleDetail() {
   )}`;
 
   const specs = [
-    { k: "Año", v: String(current.year) },
+    { k: "Año", v: current.year ? String(current.year) : "s/d" },
     { k: "Kilómetros", v: current.kmFmt },
-    { k: "Motor", v: current.engine },
-    { k: "Transmisión", v: current.gearbox },
-    { k: "Combustible", v: current.fuel },
-    { k: "Tracción", v: current.traction },
-    { k: "Carrocería", v: current.body },
+    { k: "Motor", v: formatSpec(current.engine) },
+    { k: "Transmisión", v: formatSpec(current.gearbox) },
+    { k: "Combustible", v: formatSpec(current.fuel) },
+    { k: "Tracción", v: formatSpec(current.traction) },
+    { k: "Carrocería", v: formatSpec(current.body) },
   ];
 
   return (
