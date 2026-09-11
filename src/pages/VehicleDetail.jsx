@@ -61,7 +61,6 @@ export default function VehicleDetail() {
     { k: "Combustible", v: current.fuel },
     { k: "Tracción", v: current.traction },
     { k: "Carrocería", v: current.body },
-    { k: "Dueños anteriores", v: String(current.owners) },
   ];
 
   return (

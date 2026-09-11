@@ -49,7 +49,6 @@ const EMPTY_FORM = {
   gearbox: "",
   fuel: "",
   traction: "",
-  owners: "1",
   status: "publicado",
   featured: false,
 };
@@ -95,7 +94,6 @@ export default function AdminVehicleForm({ mode }) {
           gearbox: vehicle.gearbox || "",
           fuel: vehicle.fuel || "",
           traction: vehicle.traction || "",
-          owners: vehicle.owners != null ? String(vehicle.owners) : "1",
           status: vehicle.status || "publicado",
           featured: !!vehicle.featured,
         });
@@ -216,7 +214,6 @@ export default function AdminVehicleForm({ mode }) {
       auto: form.gearbox !== "Manual",
       fuel: form.fuel,
       traction: form.traction,
-      owners: form.owners ? Number(form.owners) : undefined,
       images,
       checks: checks.filter((c) => c.title.trim()),
       status: form.status,
@@ -427,11 +424,6 @@ export default function AdminVehicleForm({ mode }) {
                       </option>
                     ))}
                   </select>
-                </label>
-
-                <label className="admin-vehicle-form__field">
-                  <span className="mono">Dueños anteriores</span>
-                  <input type="number" min="0" value={form.owners} onChange={updateField("owners")} />
                 </label>
               </div>
             </section>
