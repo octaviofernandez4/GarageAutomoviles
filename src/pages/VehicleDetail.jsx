@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button.jsx";
 import useVehicles from "../hooks/useVehicles.js";
 import useSeo from "../hooks/useSeo.js";
-import { decorateVehicle, formatMoney, formatSpec } from "../utils/format.js";
+import { decorateVehicle, formatSpec } from "../utils/format.js";
 import { optimizedImage } from "../utils/cloudinary.js";
 import { PHONE_INTL, ADDRESS_STREET, ADDRESS_LOCALITY } from "../config/business.js";
 import "./VehicleDetail.css";
@@ -55,8 +55,6 @@ export default function VehicleDetail() {
     const total = current.images.length;
     setActiveImage((prev) => (prev + delta + total) % total);
   };
-  const cuota = Math.round((current.price * 0.5) / 24 / 100) * 100;
-  const financeLine = `Anticipo ${formatMoney(Math.round(current.price * 0.5), current.currency)} + 24 cuotas de ${formatMoney(cuota, current.currency)}`;
   const waLink = `https://wa.me/${PHONE_INTL}?text=${encodeURIComponent(
     `Hola, me interesa el ${current.name} ${current.year} publicado en ${current.priceFmt}`
   )}`;
@@ -167,11 +165,13 @@ export default function VehicleDetail() {
               <div className="detail-page__price-note">Precio final · transferencia y verificación incluidas</div>
             </div>
 
-            <div className="detail-page__finance">
-              <div className="detail-page__finance-label mono">Financiación estimada</div>
-              <div className="detail-page__finance-line">{financeLine}</div>
-              <div className="detail-page__finance-note">Sujeto a aprobación crediticia. Tasas a confirmar.</div>
-            </div>
+            {current.financeNote && (
+              <div className="detail-page__finance">
+                <div className="detail-page__finance-label mono">Financiación estimada</div>
+                <div className="detail-page__finance-line">{current.financeNote}</div>
+                <div className="detail-page__finance-note">Sujeto a aprobación crediticia. Tasas a confirmar.</div>
+              </div>
+            )}
 
             <div className="detail-page__actions">
               <Button as="a" href={waLink} target="_blank" rel="noreferrer" variant="copper" className="detail-page__action">

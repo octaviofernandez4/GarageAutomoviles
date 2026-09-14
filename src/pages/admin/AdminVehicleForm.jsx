@@ -45,6 +45,7 @@ const EMPTY_FORM = {
   year: "",
   price: "",
   currency: "USD",
+  financeNote: "",
   km: "",
   engine: "",
   gearbox: "",
@@ -92,6 +93,7 @@ export default function AdminVehicleForm({ mode }) {
           year: vehicle.year ? String(vehicle.year) : "",
           price: vehicle.price ? String(vehicle.price) : "",
           currency: vehicle.currency || "USD",
+          financeNote: vehicle.financeNote || "",
           km: vehicle.km ? String(vehicle.km) : "",
           engine: vehicle.engine || "",
           gearbox: vehicle.gearbox || "",
@@ -217,6 +219,7 @@ export default function AdminVehicleForm({ mode }) {
       year: form.year ? Number(form.year) : undefined,
       price: Number(form.price),
       currency: form.currency,
+      financeNote: form.financeNote.trim(),
       km: form.km ? Number(form.km) : undefined,
       engine: form.engine,
       gearbox: form.gearbox,
@@ -350,6 +353,18 @@ export default function AdminVehicleForm({ mode }) {
                       className="admin-vehicle-form__price-input"
                     />
                   </div>
+                </label>
+
+                <label className="admin-vehicle-form__field admin-vehicle-form__field--span2">
+                  <span className="mono">Financiación (opcional)</span>
+                  <input
+                    value={form.financeNote}
+                    onChange={updateField("financeNote")}
+                    placeholder="Ej: Anticipo US$ 20.000 + 18 cuotas de US$ 950"
+                  />
+                  <span className="admin-vehicle-form__hint mono">
+                    Se muestra tal cual la escribas debajo del precio, en la ficha del auto. Si lo dejás vacío, no se muestra nada.
+                  </span>
                 </label>
               </div>
             </section>
