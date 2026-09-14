@@ -1,16 +1,16 @@
 import Button from "../Button/Button.jsx";
-import { WHATSAPP_URL, INSTAGRAM_URL, MAPS_EMBED_URL, HOURS } from "../../config/business.js";
+import { WHATSAPP_URL, INSTAGRAM_URL, MAPS_EMBED_URL, HOURS, ADDRESS_STREET, ADDRESS_LOCALITY } from "../../config/business.js";
 import "./VisitUs.css";
 
 export default function VisitUs() {
   return (
     <section id="visit" className="section visit">
       <div className="container visit__grid">
-        <div>        
+        <div>
           <h2 className="visit__title">
-            Av. Aconquija 1763
+            {ADDRESS_STREET}
             <br />
-            Yerba Buena
+            {ADDRESS_LOCALITY}
           </h2>
 
           <div className="visit__hours">

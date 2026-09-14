@@ -5,7 +5,7 @@ export const PHONE_INTL = "5493810000000";
 export const WHATSAPP_URL = `https://wa.me/${PHONE_INTL}`;
 export const INSTAGRAM_URL = "https://instagram.com/elgarageautomoviles";
 
-export const ADDRESS_STREET = "Av. Aconquija 1763";
+export const ADDRESS_STREET = "Av. Aconquija 1252";
 export const ADDRESS_LOCALITY = "Yerba Buena";
 export const ADDRESS_REGION = "Tucumán";
 export const ADDRESS_COUNTRY = "AR";

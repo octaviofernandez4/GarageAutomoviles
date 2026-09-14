@@ -5,7 +5,7 @@ import useVehicles from "../hooks/useVehicles.js";
 import useSeo from "../hooks/useSeo.js";
 import { decorateVehicle, formatMoney, formatSpec } from "../utils/format.js";
 import { optimizedImage } from "../utils/cloudinary.js";
-import { PHONE_INTL } from "../config/business.js";
+import { PHONE_INTL, ADDRESS_STREET, ADDRESS_LOCALITY } from "../config/business.js";
 import "./VehicleDetail.css";
 
 export default function VehicleDetail() {
@@ -183,7 +183,7 @@ export default function VehicleDetail() {
             </div>
 
             <div className="detail-page__visit-note">
-              Podés verla en Av. Aconquija 1763, Yerba Buena. Coordinamos test drive sin cargo.
+              Podés verla en {ADDRESS_STREET}, {ADDRESS_LOCALITY}. Coordinamos test drive sin cargo.
             </div>
           </div>
         </aside>
