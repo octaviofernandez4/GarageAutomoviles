@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import StockFilters from "../components/StockFilters/StockFilters.jsx";
 import StockCard from "../components/StockCard/StockCard.jsx";
@@ -9,7 +9,7 @@ import useSeo from "../hooks/useSeo.js";
 import { decorateVehicle } from "../utils/format.js";
 import "./Stock.css";
 
-function readInitialFilters(searchParams, meta) {
+function readInitialFilters(searchParams) {
   const brand = searchParams.get("brand");
   const body = searchParams.get("body");
   const priceMax = searchParams.get("priceMax");
@@ -18,7 +18,7 @@ function readInitialFilters(searchParams, meta) {
   return {
     brand: brand || null,
     body: body || null,
-    priceMax: priceMax ? Number(priceMax) : meta.priceMax,
+    priceMax: priceMax ? Number(priceMax) : null,
     onlyAuto: onlyAuto === "1",
   };
 }
@@ -28,9 +28,16 @@ export default function Stock() {
   const meta = useVehicleMeta();
   const [searchParams] = useSearchParams();
 
-  const [filters, setFilters] = useState(() => readInitialFilters(searchParams, meta));
+  const [filters, setFilters] = useState(() => readInitialFilters(searchParams));
+  const [userSetPrice, setUserSetPrice] = useState(() => searchParams.get("priceMax") != null);
   const [order, setOrder] = useState(() => searchParams.get("order") || "recent");
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    if (!userSetPrice) {
+      setFilters((prev) => ({ ...prev, priceMax: meta.priceMax }));
+    }
+  }, [meta.priceMax, userSetPrice]);
 
   useSeo({
     title: "Stock de autos usados en Tucumán",
@@ -43,7 +50,7 @@ export default function Stock() {
       (v) =>
         (!filters.brand || v.brand === filters.brand) &&
         (!filters.body || v.body === filters.body) &&
-        v.price <= filters.priceMax &&
+        (filters.priceMax == null || v.price <= filters.priceMax) &&
         (!filters.onlyAuto || v.auto)
     );
 
@@ -54,9 +61,14 @@ export default function Stock() {
     return list.map(decorateVehicle);
   }, [vehicles, filters, order]);
 
-  const handleFilterChange = (patch) => setFilters((prev) => ({ ...prev, ...patch }));
-  const handleClear = () =>
+  const handleFilterChange = (patch) => {
+    if (patch.priceMax !== undefined) setUserSetPrice(true);
+    setFilters((prev) => ({ ...prev, ...patch }));
+  };
+  const handleClear = () => {
+    setUserSetPrice(false);
     setFilters({ brand: null, body: null, priceMax: meta.priceMax, onlyAuto: false });
+  };
 
   return (
     <main className="stock-page">

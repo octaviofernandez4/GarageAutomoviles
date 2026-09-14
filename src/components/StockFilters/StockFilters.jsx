@@ -12,7 +12,8 @@ export default function StockFilters({
   priceMin,
   priceMax: priceCeiling,
 }) {
-  const { brand, body, priceMax, onlyAuto } = filters;
+  const { brand, body, onlyAuto } = filters;
+  const priceMax = filters.priceMax ?? priceCeiling;
 
   return (
     <aside className={`stock-filters ${open ? "stock-filters--open" : ""}`}>
