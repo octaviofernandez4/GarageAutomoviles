@@ -44,6 +44,7 @@ const EMPTY_FORM = {
   body: "",
   year: "",
   price: "",
+  currency: "USD",
   km: "",
   engine: "",
   gearbox: "",
@@ -53,8 +54,9 @@ const EMPTY_FORM = {
   featured: false,
 };
 
-function formatMoney(value) {
-  return `US$ ${Number(value).toLocaleString("es-AR")}`;
+function formatMoney(value, currency = "USD") {
+  const prefix = currency === "ARS" ? "$" : "US$";
+  return `${prefix} ${Number(value).toLocaleString("es-AR")}`;
 }
 
 export default function AdminVehicleForm({ mode }) {
@@ -89,6 +91,7 @@ export default function AdminVehicleForm({ mode }) {
           body: vehicle.body || "",
           year: vehicle.year ? String(vehicle.year) : "",
           price: vehicle.price ? String(vehicle.price) : "",
+          currency: vehicle.currency || "USD",
           km: vehicle.km ? String(vehicle.km) : "",
           engine: vehicle.engine || "",
           gearbox: vehicle.gearbox || "",
@@ -213,6 +216,7 @@ export default function AdminVehicleForm({ mode }) {
       body: form.body,
       year: form.year ? Number(form.year) : undefined,
       price: Number(form.price),
+      currency: form.currency,
       km: form.km ? Number(form.km) : undefined,
       engine: form.engine,
       gearbox: form.gearbox,
@@ -252,7 +256,7 @@ export default function AdminVehicleForm({ mode }) {
     form.brand || form.body || form.year
       ? `${form.brand || "Marca"} · ${form.body || "Carrocería"} · ${form.year || "Año"}`
       : "Marca · Carrocería · Año";
-  const previewPrice = form.price ? formatMoney(form.price) : "US$ —";
+  const previewPrice = form.price ? formatMoney(form.price, form.currency) : "US$ —";
 
   return (
     <div className="admin-vehicle-form">
@@ -312,15 +316,37 @@ export default function AdminVehicleForm({ mode }) {
                 </label>
 
                 <label className="admin-vehicle-form__field">
-                  <span className="mono">Precio en dólares</span>
+                  <span className="mono">Precio</span>
+                  <div className="admin-vehicle-form__currency-toggle">
+                    <button
+                      type="button"
+                      className={`admin-vehicle-form__currency-btn ${
+                        form.currency === "USD" ? "admin-vehicle-form__currency-btn--active" : ""
+                      }`}
+                      onClick={() => setForm((prev) => ({ ...prev, currency: "USD" }))}
+                    >
+                      Dólares
+                    </button>
+                    <button
+                      type="button"
+                      className={`admin-vehicle-form__currency-btn ${
+                        form.currency === "ARS" ? "admin-vehicle-form__currency-btn--active" : ""
+                      }`}
+                      onClick={() => setForm((prev) => ({ ...prev, currency: "ARS" }))}
+                    >
+                      Pesos
+                    </button>
+                  </div>
                   <div className="admin-vehicle-form__price-wrap">
-                    <span className="admin-vehicle-form__price-prefix">US$</span>
+                    <span className="admin-vehicle-form__price-prefix">
+                      {form.currency === "ARS" ? "$" : "US$"}
+                    </span>
                     <input
                       type="text"
                       inputMode="numeric"
                       value={form.price}
                       onChange={updateNumericField("price")}
-                      placeholder="42500"
+                      placeholder={form.currency === "ARS" ? "42500000" : "42500"}
                       className="admin-vehicle-form__price-input"
                     />
                   </div>

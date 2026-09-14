@@ -1,13 +1,12 @@
-const moneyFormatter = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-});
+const moneyFormatters = {
+  USD: new Intl.NumberFormat("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 0 }),
+  ARS: new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }),
+};
 
 const numberFormatter = new Intl.NumberFormat("es-AR");
 
-export function formatMoney(value) {
-  return moneyFormatter.format(value);
+export function formatMoney(value, currency = "USD") {
+  return (moneyFormatters[currency] || moneyFormatters.USD).format(value);
 }
 
 export function formatKm(value) {
@@ -30,7 +29,7 @@ export function decorateVehicle(vehicle) {
     ...vehicle,
     images,
     image: images[0],
-    priceFmt: formatMoney(vehicle.price),
+    priceFmt: formatMoney(vehicle.price, vehicle.currency),
     kmFmt: formatKm(vehicle.km),
     summary: `${vehicle.year} · ${formatKm(vehicle.km)} · ${formatSpec(vehicle.engine)} · ${formatSpec(vehicle.gearbox)}`,
   };

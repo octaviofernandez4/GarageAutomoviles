@@ -153,6 +153,29 @@
   letter-spacing: normal;
 }
 
+.admin-vehicle-form__currency-toggle {
+  display: flex;
+  gap: 6px;
+}
+
+.admin-vehicle-form__currency-btn {
+  flex: 1;
+  border: 1px solid var(--a-border-3);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--a-text-2);
+  font-family: var(--a-font);
+  font-size: 13px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.admin-vehicle-form__currency-btn--active {
+  border-color: var(--a-accent);
+  color: var(--a-accent);
+  background: rgba(232, 147, 61, 0.12);
+}
+
 .admin-vehicle-form__price-wrap {
   position: relative;
 }

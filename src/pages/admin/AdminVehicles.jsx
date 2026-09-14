@@ -30,8 +30,9 @@ const SORTERS = {
   nameAsc: (a, b) => a.name.localeCompare(b.name),
 };
 
-function formatMoney(value) {
-  return `US$ ${Number(value || 0).toLocaleString("es-AR")}`;
+function formatMoney(value, currency = "USD") {
+  const prefix = currency === "ARS" ? "$" : "US$";
+  return `${prefix} ${Number(value || 0).toLocaleString("es-AR")}`;
 }
 
 export default function AdminVehicles() {
@@ -266,7 +267,7 @@ export default function AdminVehicles() {
 
                 <div className="admin-vehicles__vcard-price">
                   <span className="mono">Precio venta</span>
-                  <strong>{formatMoney(vehicle.price)}</strong>
+                  <strong>{formatMoney(vehicle.price, vehicle.currency)}</strong>
                 </div>
 
                 <div className="admin-vehicles__vcard-actions">

@@ -56,7 +56,7 @@ export default function VehicleDetail() {
     setActiveImage((prev) => (prev + delta + total) % total);
   };
   const cuota = Math.round((current.price * 0.5) / 24 / 100) * 100;
-  const financeLine = `Anticipo ${formatMoney(Math.round(current.price * 0.5))} + 24 cuotas de ${formatMoney(cuota)}`;
+  const financeLine = `Anticipo ${formatMoney(Math.round(current.price * 0.5), current.currency)} + 24 cuotas de ${formatMoney(cuota, current.currency)}`;
   const waLink = `https://wa.me/${PHONE_INTL}?text=${encodeURIComponent(
     `Hola, me interesa el ${current.name} ${current.year} publicado en ${current.priceFmt}`
   )}`;
