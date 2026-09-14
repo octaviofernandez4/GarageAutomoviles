@@ -1,7 +1,7 @@
 export const SITE_URL = "https://elgarageautomovilesyb.com";
 export const BUSINESS_NAME = "El Garage Automóviles";
 
-export const PHONE_INTL = "5493810000000";
+export const PHONE_INTL = "5493814652678";
 export const WHATSAPP_URL = `https://wa.me/${PHONE_INTL}`;
 export const INSTAGRAM_URL = "https://instagram.com/elgarageautomoviles";
 
