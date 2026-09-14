@@ -183,7 +183,7 @@ export default function VehicleDetail() {
             </div>
 
             <div className="detail-page__visit-note">
-              Podés verla en {ADDRESS_STREET}, {ADDRESS_LOCALITY}. Coordinamos test drive sin cargo.
+              Podés verla en {ADDRESS_STREET}, {ADDRESS_LOCALITY}.
             </div>
           </div>
         </aside>
