@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import useGoVisit from "../../hooks/useGoVisit.js";
+import { WHATSAPP_URL, INSTAGRAM_URL, MAPS_URL, ADDRESS_FULL } from "../../config/business.js";
 import "./Footer.css";
-
-const WHATSAPP_URL = "https://wa.me/5493810000000";
-const INSTAGRAM_URL = "https://instagram.com/elgarageautomoviles";
-const MAPS_URL =
-  "https://www.google.com/maps/search/?api=1&query=Av.+Aconquija+1763,+Yerba+Buena,+Tucum%C3%A1n";
 
 export default function Footer() {
   const goVisit = useGoVisit();
@@ -16,7 +12,7 @@ export default function Footer() {
         <div className="footer__brand">
           <img src="/ElGarage.jpg" alt="El Garage Automóviles" className="footer__logo" />
           <p className="footer__tagline">
-            Usados seleccionados con historial verificado. Av. Aconquija 1763, Yerba Buena, Tucumán.
+            Usados seleccionados con historial verificado. {ADDRESS_FULL}.
           </p>
         </div>
 

@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import Button from "../Button/Button.jsx";
+import { WHATSAPP_URL } from "../../config/business.js";
 import "./Hero.css";
-
-const WHATSAPP_URL = "https://wa.me/5493810000000";
 
 const STATS = [
   { value: "7.000+", label: "clientes" },

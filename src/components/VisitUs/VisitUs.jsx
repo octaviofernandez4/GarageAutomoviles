@@ -1,16 +1,6 @@
 import Button from "../Button/Button.jsx";
+import { WHATSAPP_URL, INSTAGRAM_URL, MAPS_EMBED_URL, HOURS } from "../../config/business.js";
 import "./VisitUs.css";
-
-const WHATSAPP_URL = "https://wa.me/5493810000000";
-const INSTAGRAM_URL = "https://instagram.com/elgarageautomoviles";
-const MAPS_EMBED_URL =
-  "https://www.google.com/maps?q=Av.+Aconquija+1763,+Yerba+Buena,+Tucum%C3%A1n&output=embed";
-
-const HOURS = [
-  { label: "Lun a Vie", value: "09:00–13:00 · 16:30–20:30" },
-  { label: "Sábados", value: "09:00–13:00" },
-  { label: "Domingos", value: "Cerrado · atendemos por WhatsApp", muted: true },
-];
 
 export default function VisitUs() {
   return (

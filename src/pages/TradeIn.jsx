@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Button from "../components/Button/Button.jsx";
 import { submitTradeIn } from "../api/tradeIn.js";
 import useVehicles from "../hooks/useVehicles.js";
+import useSeo from "../hooks/useSeo.js";
 import "./TradeIn.css";
 
 const STEPS = [
@@ -107,6 +108,12 @@ export default function TradeIn() {
   const autoId = searchParams.get("auto");
   const { vehicles } = useVehicles();
   const targetVehicle = autoId ? vehicles.find((v) => v.id === autoId) : null;
+
+  useSeo({
+    title: "Tasá tu usado en Tucumán",
+    description: "Tasamos tu auto usado en 24 horas con precios reales de mercado y lo tomamos como parte de pago.",
+    path: "/tasar",
+  });
 
   const [form, setForm] = useState(INITIAL_FORM);
   const [sent, setSent] = useState(false);

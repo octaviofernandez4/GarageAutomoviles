@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button.jsx";
 import useVehicles from "../hooks/useVehicles.js";
+import useSeo from "../hooks/useSeo.js";
 import { decorateVehicle, formatMoney, formatSpec } from "../utils/format.js";
 import { optimizedImage } from "../utils/cloudinary.js";
+import { PHONE_INTL } from "../config/business.js";
 import "./VehicleDetail.css";
-
-const WHATSAPP_NUMBER = "5493810000000";
 
 export default function VehicleDetail() {
   const { id } = useParams();
@@ -17,6 +17,14 @@ export default function VehicleDetail() {
   useEffect(() => {
     setActiveImage(0);
   }, [id]);
+
+  useSeo({
+    title: found ? `${found.name} en venta en Tucumán` : "Vehículo no encontrado",
+    description: found
+      ? `${found.name} ${found.year || ""} usado, en venta en El Garage Automóviles, Yerba Buena, Tucumán. Consultá precio y financiación.`.replace(/\s+/g, " ").trim()
+      : "No encontramos esa unidad en el stock de El Garage Automóviles.",
+    path: `/stock/${id}`,
+  });
 
   if (status === "loading") {
     return (
@@ -49,7 +57,7 @@ export default function VehicleDetail() {
   };
   const cuota = Math.round((current.price * 0.5) / 24 / 100) * 100;
   const financeLine = `Anticipo ${formatMoney(Math.round(current.price * 0.5))} + 24 cuotas de ${formatMoney(cuota)}`;
-  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  const waLink = `https://wa.me/${PHONE_INTL}?text=${encodeURIComponent(
     `Hola, me interesa el ${current.name} ${current.year} publicado en ${current.priceFmt}`
   )}`;
 

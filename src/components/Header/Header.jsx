@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useGoVisit from "../../hooks/useGoVisit.js";
+import { WHATSAPP_URL } from "../../config/business.js";
 import "./Header.css";
 
 const NAV_LINKS = [
@@ -8,8 +9,6 @@ const NAV_LINKS = [
   { label: "Stock", to: "/stock" },
   { label: "Tasá tu usado", to: "/tasar" },
 ];
-
-const WHATSAPP_URL = "https://wa.me/5493810000000";
 
 function WhatsAppIcon() {
   return (

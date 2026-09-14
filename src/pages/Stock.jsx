@@ -5,6 +5,7 @@ import StockCard from "../components/StockCard/StockCard.jsx";
 import Button from "../components/Button/Button.jsx";
 import useVehicles from "../hooks/useVehicles.js";
 import useVehicleMeta from "../hooks/useVehicleMeta.js";
+import useSeo from "../hooks/useSeo.js";
 import { decorateVehicle } from "../utils/format.js";
 import "./Stock.css";
 
@@ -30,6 +31,12 @@ export default function Stock() {
   const [filters, setFilters] = useState(() => readInitialFilters(searchParams, meta));
   const [order, setOrder] = useState(() => searchParams.get("order") || "recent");
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useSeo({
+    title: "Stock de autos usados en Tucumán",
+    description: "Explorá el stock completo de autos usados en El Garage Automóviles: filtrá por marca, carrocería y precio.",
+    path: "/stock",
+  });
 
   const results = useMemo(() => {
     let list = vehicles.filter(
